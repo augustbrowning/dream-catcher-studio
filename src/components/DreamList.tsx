@@ -3,9 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Search, Filter, Moon, Sparkles, Clock, Heart, Brain } from "lucide-react";
-import { format } from "date-fns";
+import { Search, ArrowLeft, Lightbulb, ThumbsUp, ThumbsDown, Moon } from "lucide-react";
+import { format, differenceInDays, isToday, isYesterday, startOfDay } from "date-fns";
 
 interface Dream {
   id: string;
@@ -23,8 +22,7 @@ interface DreamListProps {
 
 const DreamList = ({ dreams }: DreamListProps) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [moodFilter, setMoodFilter] = useState("all");
-  const [lucidityFilter, setLucidityFilter] = useState("all");
+  const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
 
   const getMoodEmoji = (mood: string) => {
     const moodMap: Record<string, string> = {
@@ -40,26 +38,177 @@ const DreamList = ({ dreams }: DreamListProps) => {
     return moodMap[mood] || "😐";
   };
 
-  const getLucidityIcon = (lucidity: string) => {
-    switch (lucidity) {
-      case "fully-lucid": return <Brain className="h-4 w-4 text-accent" />;
-      case "semi-lucid": return <Brain className="h-4 w-4 text-primary/70" />;
-      default: return <Moon className="h-4 w-4 text-muted-foreground" />;
+  // Calculate streak
+  const calculateStreak = () => {
+    if (dreams.length === 0) return { current: 0, weekDays: Array(7).fill(null) };
+
+    const sortedDreams = dreams
+      .map(dream => startOfDay(new Date(dream.date)))
+      .sort((a, b) => b.getTime() - a.getTime());
+
+    const uniqueDays = [...new Set(sortedDreams.map(date => date.getTime()))];
+    const today = startOfDay(new Date());
+    
+    let streak = 0;
+    let currentDate = today;
+
+    // Check if there's a dream today or yesterday
+    const hasRecentDream = uniqueDays.some(day => {
+      const dayDate = new Date(day);
+      return isToday(dayDate) || isYesterday(dayDate);
+    });
+
+    if (!hasRecentDream) {
+      streak = 0;
+    } else {
+      // Calculate consecutive days
+      for (let i = 0; i < uniqueDays.length; i++) {
+        const dreamDate = new Date(uniqueDays[i]);
+        const daysDiff = differenceInDays(currentDate, dreamDate);
+        
+        if (daysDiff === 0 || daysDiff === 1) {
+          streak++;
+          currentDate = dreamDate;
+        } else {
+          break;
+        }
+      }
     }
+
+    // Generate week view (last 7 days)
+    const weekDays = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dayStart = startOfDay(date);
+      const hasDream = uniqueDays.some(dreamDay => 
+        new Date(dreamDay).getTime() === dayStart.getTime()
+      );
+      
+      weekDays.push({
+        day: format(dayStart, 'EEE')[0], // First letter of day
+        date: format(dayStart, 'd'),
+        hasDream,
+        isToday: isToday(dayStart)
+      });
+    }
+
+    return { current: streak, weekDays };
   };
 
   const filteredDreams = dreams.filter(dream => {
     const matchesSearch = dream.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          dream.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          dream.themes.some(theme => theme.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesMood = moodFilter === "all" || dream.mood === moodFilter;
-    const matchesLucidity = lucidityFilter === "all" || dream.lucidity === lucidityFilter;
-    
-    return matchesSearch && matchesMood && matchesLucidity;
+    return matchesSearch;
   });
 
   const sortedDreams = filteredDreams.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const { current: streak, weekDays } = calculateStreak();
 
+  // If viewing individual dream
+  if (selectedDream) {
+    return (
+      <div className="w-full max-w-4xl mx-auto space-y-6">
+        <div className="flex items-center gap-4 mb-6">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => setSelectedDream(null)}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Journal
+          </Button>
+        </div>
+
+        <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-2xl text-foreground flex items-center gap-3">
+                  <span className="text-3xl">{getMoodEmoji(selectedDream.mood)}</span>
+                  {selectedDream.title}
+                </CardTitle>
+                <p className="text-muted-foreground mt-1">
+                  {format(new Date(selectedDream.date), 'MMMM dd, yyyy')}
+                </p>
+              </div>
+              <span className="text-4xl">{getMoodEmoji(selectedDream.mood)}</span>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Tags */}
+            {selectedDream.themes.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {selectedDream.themes.map((theme) => (
+                  <Badge 
+                    key={theme} 
+                    variant="outline" 
+                    className="bg-primary/10 border-primary/30 text-foreground"
+                  >
+                    {theme}
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            {/* Dream Description */}
+            <div className="prose prose-sm max-w-none">
+              <p className="text-foreground/90 leading-relaxed text-lg">
+                {selectedDream.description}
+              </p>
+            </div>
+
+            {/* Dream Analysis Section */}
+            <Card className="bg-card/50 border-primary/20">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Lightbulb className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-semibold text-foreground">Dream Analysis</h3>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                    <p className="text-sm text-muted-foreground mb-2">AI Insight</p>
+                    <p className="text-foreground">
+                      This dream shows themes of {selectedDream.themes.slice(0, 2).join(' and ')}, 
+                      suggesting your subconscious is processing experiences related to these areas. 
+                      The {selectedDream.mood} mood indicates {
+                        selectedDream.mood === 'joyful' ? 'positive emotional states' :
+                        selectedDream.mood === 'scary' ? 'underlying anxieties or fears' :
+                        selectedDream.mood === 'peaceful' ? 'a calm and balanced mindset' :
+                        'mixed emotional processing'
+                      }.
+                    </p>
+                  </div>
+
+                  {/* Request Feature */}
+                  <div className="border-t border-primary/20 pt-4">
+                    <p className="text-sm text-muted-foreground mb-3">Request Feature</p>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                          <ThumbsUp className="h-4 w-4" />
+                          Yes Please!
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                          <ThumbsDown className="h-4 w-4" />
+                          No Thanks
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Main journal view
   if (dreams.length === 0) {
     return (
       <Card className="w-full max-w-4xl mx-auto bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
@@ -76,108 +225,83 @@ const DreamList = ({ dreams }: DreamListProps) => {
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search dreams..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10 bg-card/50 backdrop-blur-sm border-primary/20 focus:border-primary/50"
+        />
+      </div>
+
+      {/* Days in a Row */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-xl bg-gradient-dream bg-clip-text text-transparent">
-            <Sparkles className="h-5 w-5 text-primary" />
-            Your Dream Journal
-            <span className="text-sm font-normal text-muted-foreground">({dreams.length} dreams captured)</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search your dreams..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-card/50 backdrop-blur-sm border-primary/20 focus:border-primary/50"
-              />
-            </div>
-            <Select value={moodFilter} onValueChange={setMoodFilter}>
-              <SelectTrigger className="w-full sm:w-48 bg-card/50 backdrop-blur-sm border-primary/20">
-                <SelectValue placeholder="Filter by mood" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Moods</SelectItem>
-                <SelectItem value="joyful">😊 Joyful</SelectItem>
-                <SelectItem value="peaceful">😌 Peaceful</SelectItem>
-                <SelectItem value="exciting">🤩 Exciting</SelectItem>
-                <SelectItem value="mysterious">🔮 Mysterious</SelectItem>
-                <SelectItem value="scary">😰 Scary</SelectItem>
-                <SelectItem value="sad">😢 Sad</SelectItem>
-                <SelectItem value="confused">😵 Confused</SelectItem>
-                <SelectItem value="neutral">😐 Neutral</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={lucidityFilter} onValueChange={setLucidityFilter}>
-              <SelectTrigger className="w-full sm:w-48 bg-card/50 backdrop-blur-sm border-primary/20">
-                <SelectValue placeholder="Filter by lucidity" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="not-lucid">Not Lucid</SelectItem>
-                <SelectItem value="semi-lucid">Semi-Lucid</SelectItem>
-                <SelectItem value="fully-lucid">Fully Lucid</SelectItem>
-              </SelectContent>
-            </Select>
+        <CardContent className="p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">DAYS IN A ROW</h3>
+          
+          <div className="flex justify-between items-end mb-4">
+            {weekDays.map((day, index) => (
+              <div key={index} className="flex flex-col items-center space-y-2">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ${
+                  day.hasDream 
+                    ? 'bg-primary text-primary-foreground' 
+                    : day.isToday 
+                      ? 'bg-muted border-2 border-primary text-foreground' 
+                      : 'bg-muted text-muted-foreground'
+                }`}>
+                  {day.date}
+                </div>
+                <span className="text-xs text-muted-foreground">{day.day}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-right">
+            <span className="text-2xl font-bold text-primary">{streak}</span>
+            <span className="text-sm text-muted-foreground ml-1">Total</span>
           </div>
         </CardContent>
       </Card>
 
+      {/* Dream Entries */}
       <div className="space-y-4">
         {sortedDreams.map((dream) => (
           <Card 
             key={dream.id} 
-            className="bg-card/60 backdrop-blur-lg border-primary/20 shadow-mystical hover:shadow-dream transition-all duration-300 hover:scale-[1.01] animate-dream-float"
+            className="bg-card/60 backdrop-blur-lg border-primary/20 shadow-mystical hover:shadow-dream transition-all duration-300 hover:scale-[1.01] cursor-pointer"
+            onClick={() => setSelectedDream(dream)}
           >
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <CardTitle className="text-lg text-foreground flex items-center gap-2">
-                  <span className="text-2xl">{getMoodEmoji(dream.mood)}</span>
-                  {dream.title}
-                </CardTitle>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  {getLucidityIcon(dream.lucidity)}
-                  <Calendar className="h-4 w-4" />
-                  {format(new Date(dream.date), 'MMM dd, yyyy')}
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">{getMoodEmoji(dream.mood)}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {format(new Date(dream.date), 'M-dd-yyyy')}
+                  </span>
                 </div>
+                <span className="text-2xl">{getMoodEmoji(dream.mood)}</span>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-foreground/90 leading-relaxed">{dream.description}</p>
               
               {dream.themes.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {dream.themes.map((theme) => (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {dream.themes.slice(0, 4).map((theme) => (
                     <Badge 
                       key={theme} 
                       variant="outline" 
-                      className="bg-primary/10 border-primary/30 text-foreground hover:bg-primary/20"
+                      className="bg-primary/10 border-primary/30 text-foreground text-xs"
                     >
                       {theme}
                     </Badge>
                   ))}
+                  {dream.themes.length > 4 && (
+                    <Badge variant="outline" className="bg-muted/20 border-muted text-muted-foreground text-xs">
+                      +{dream.themes.length - 4}
+                    </Badge>
+                  )}
                 </div>
               )}
-              
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <div className="flex items-center gap-4">
-                  <span className="flex items-center gap-1">
-                    <Heart className="h-3 w-3" />
-                    {dream.mood}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Brain className="h-3 w-3" />
-                    {dream.lucidity.replace('-', ' ')}
-                  </span>
-                </div>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {format(new Date(dream.date), 'h:mm a')}
-                </span>
-              </div>
             </CardContent>
           </Card>
         ))}
@@ -189,7 +313,7 @@ const DreamList = ({ dreams }: DreamListProps) => {
             <Search className="h-12 w-12 mx-auto mb-4 text-primary/50" />
             <h3 className="text-lg font-semibold mb-2 text-moonlight">No Dreams Found</h3>
             <p className="text-muted-foreground">
-              Try adjusting your search terms or filters to find your dreams.
+              Try adjusting your search terms to find your dreams.
             </p>
           </CardContent>
         </Card>
