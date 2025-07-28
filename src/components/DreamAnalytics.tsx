@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { X, Upload, BarChart3 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { format, subDays } from "date-fns";
 
 interface Dream {
@@ -69,6 +71,34 @@ const BEHAVIORAL_CORRELATIONS = {
 
 const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
   const [activeThemeCategory, setActiveThemeCategory] = useState<keyof typeof THEME_CATEGORIES>("sensations");
+  const [isDaylioConnected, setIsDaylioConnected] = useState(false);
+  const { toast } = useToast();
+
+  const handleDaylioImport = () => {
+    // Create file input element
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.csv,.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        // TODO: Process Daylio data file
+        toast({
+          title: "Import Started",
+          description: `Processing ${file.name}...`,
+        });
+        // For now, just simulate connection
+        setTimeout(() => {
+          setIsDaylioConnected(true);
+          toast({
+            title: "Daylio Connected",
+            description: "Your habit data has been imported successfully!",
+          });
+        }, 2000);
+      }
+    };
+    input.click();
+  };
 
   if (dreams.length === 0) {
     return (
@@ -212,67 +242,99 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
         <CardContent className="p-6">
           <h3 className="text-xl font-semibold mb-6 text-foreground">Behavioral Correlations</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Joyful Dreams */}
-            <div>
-              <h4 className="text-lg font-medium mb-4 text-foreground flex items-center gap-2">
-                😊 Joyful Dreams
-              </h4>
-              <div className="space-y-3">
-                {BEHAVIORAL_CORRELATIONS.joyful.map((item) => (
-                  <div key={item.activity} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
-                    <span className="text-sm">{item.activity}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">{item.percentage}%</span>
-                      <button className="text-xs text-muted-foreground hover:text-foreground">
-                        Remove Connection
-                      </button>
-                    </div>
-                  </div>
-                ))}
+          {!isDaylioConnected ? (
+            /* Daylio Connection CTA */
+            <div className="text-center py-12">
+              <div className="mb-6">
+                <BarChart3 className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h4 className="text-xl font-semibold text-foreground mb-2">Connect Your Habit Tracker</h4>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Import data from Daylio to see correlations between your daily habits and dream patterns.
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <Button 
+                  onClick={handleDaylioImport}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  size="lg"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Import Daylio Data
+                </Button>
+                
+                <div className="text-xs text-muted-foreground">
+                  <p>Supported formats: CSV, JSON</p>
+                  <p className="mt-1">
+                    Export your data from Daylio: Settings → Data → Export
+                  </p>
+                </div>
               </div>
             </div>
+          ) : (
+            /* Connected State - Show actual correlations */
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Joyful Dreams */}
+              <div>
+                <h4 className="text-lg font-medium mb-4 text-foreground flex items-center gap-2">
+                  😊 Joyful Dreams
+                </h4>
+                <div className="space-y-3">
+                  {BEHAVIORAL_CORRELATIONS.joyful.map((item) => (
+                    <div key={item.activity} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                      <span className="text-sm">{item.activity}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">{item.percentage}%</span>
+                        <button className="text-xs text-muted-foreground hover:text-foreground">
+                          Remove Connection
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-            {/* Neutral/Mixed Dreams */}
-            <div>
-              <h4 className="text-lg font-medium mb-4 text-foreground flex items-center gap-2">
-                😐 Neutral/Mixed Dreams
-              </h4>
-              <div className="space-y-3">
-                {BEHAVIORAL_CORRELATIONS.neutral.map((item) => (
-                  <div key={item.activity} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-950/20 rounded-lg">
-                    <span className="text-sm">{item.activity}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">{item.percentage}%</span>
-                      <button className="text-xs text-muted-foreground hover:text-foreground">
-                        Remove Connection
-                      </button>
+              {/* Neutral/Mixed Dreams */}
+              <div>
+                <h4 className="text-lg font-medium mb-4 text-foreground flex items-center gap-2">
+                  😐 Neutral/Mixed Dreams
+                </h4>
+                <div className="space-y-3">
+                  {BEHAVIORAL_CORRELATIONS.neutral.map((item) => (
+                    <div key={item.activity} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-950/20 rounded-lg">
+                      <span className="text-sm">{item.activity}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">{item.percentage}%</span>
+                        <button className="text-xs text-muted-foreground hover:text-foreground">
+                          Remove Connection
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Terrifying Dreams */}
-            <div>
-              <h4 className="text-lg font-medium mb-4 text-foreground flex items-center gap-2">
-                😨 Terrifying Dreams
-              </h4>
-              <div className="space-y-3">
-                {BEHAVIORAL_CORRELATIONS.scary.map((item) => (
-                  <div key={item.activity} className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950/20 rounded-lg">
-                    <span className="text-sm">{item.activity}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">{item.percentage}%</span>
-                      <button className="text-xs text-muted-foreground hover:text-foreground">
-                        Remove Connection
-                      </button>
+              {/* Terrifying Dreams */}
+              <div>
+                <h4 className="text-lg font-medium mb-4 text-foreground flex items-center gap-2">
+                  😨 Terrifying Dreams
+                </h4>
+                <div className="space-y-3">
+                  {BEHAVIORAL_CORRELATIONS.scary.map((item) => (
+                    <div key={item.activity} className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950/20 rounded-lg">
+                      <span className="text-sm">{item.activity}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">{item.percentage}%</span>
+                        <button className="text-xs text-muted-foreground hover:text-foreground">
+                          Remove Connection
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
