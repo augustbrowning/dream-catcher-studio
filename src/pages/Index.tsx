@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Navigation from "@/components/Navigation";
-import DreamEntry from "@/components/DreamEntry";
+import TagBasedDreamEntry from "@/components/TagBasedDreamEntry";
 import DreamList from "@/components/DreamList";
 import DreamAnalytics from "@/components/DreamAnalytics";
 import { Button } from "@/components/ui/button";
@@ -85,13 +85,13 @@ const Index = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "entry":
-        return <DreamEntry onSaveDream={handleSaveDream} />;
+        return <TagBasedDreamEntry onSaveDream={handleSaveDream} />;
       case "list":
         return <DreamList dreams={dreams} />;
       case "analytics":
         return <DreamAnalytics dreams={dreams} />;
       default:
-        return <DreamEntry onSaveDream={handleSaveDream} />;
+        return <TagBasedDreamEntry onSaveDream={handleSaveDream} />;
     }
   };
 
