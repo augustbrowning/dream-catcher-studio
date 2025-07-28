@@ -52,6 +52,11 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				'dream-glow': 'hsl(var(--dream-glow))',
+				'star-shimmer': 'hsl(var(--star-shimmer))',
+				'mystical-purple': 'hsl(var(--mystical-purple))',
+				'ethereal-blue': 'hsl(var(--ethereal-blue))',
+				'moonlight': 'hsl(var(--moonlight))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +89,38 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'dream-float': {
+					'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+					'50%': { transform: 'translateY(-10px) rotate(1deg)' }
+				},
+				'star-twinkle': {
+					'0%, 100%': { opacity: '0.3' },
+					'50%': { opacity: '1' }
+				},
+				'glow-pulse': {
+					'0%, 100%': { boxShadow: '0 0 20px hsl(var(--primary) / 0.3)' },
+					'50%': { boxShadow: '0 0 30px hsl(var(--primary) / 0.6)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'dream-float': 'dream-float 6s ease-in-out infinite',
+				'star-twinkle': 'star-twinkle 2s ease-in-out infinite',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite'
+			},
+			backgroundImage: {
+				'gradient-night': 'var(--gradient-night)',
+				'gradient-dream': 'var(--gradient-dream)',
+				'gradient-mystical': 'var(--gradient-mystical)',
+				'gradient-starfield': 'var(--gradient-starfield)'
+			},
+			boxShadow: {
+				'dream': 'var(--shadow-dream)',
+				'mystical': 'var(--shadow-mystical)',
+				'glow-primary': 'var(--glow-primary)',
+				'glow-accent': 'var(--glow-accent)'
 			}
 		}
 	},
