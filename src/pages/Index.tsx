@@ -5,8 +5,10 @@ import Navigation from "@/components/Navigation";
 import TagBasedDreamEntry from "@/components/TagBasedDreamEntry";
 import DreamList from "@/components/DreamList";
 import DreamAnalytics from "@/components/DreamAnalytics";
+import DreamEntryPopup from "@/components/DreamEntryPopup";
 import { Button } from "@/components/ui/button";
 import starryBackground from "@/assets/starry-background.jpg";
+import { format, isToday } from "date-fns";
 
 interface Dream {
   id: string;
@@ -21,8 +23,9 @@ interface Dream {
 const Index = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("entry");
+  const [activeTab, setActiveTab] = useState("list"); // Default to journal view
   const [dreams, setDreams] = useState<Dream[]>([]);
+  const [showDreamPopup, setShowDreamPopup] = useState(false);
 
   // Redirect to auth if not logged in
   useEffect(() => {
@@ -73,6 +76,17 @@ const Index = () => {
     localStorage.setItem("dreamcatcher-dreams", JSON.stringify(dreams));
   }, [dreams]);
 
+  // Check if popup should be shown on first visit each day
+  useEffect(() => {
+    const lastVisitDate = localStorage.getItem("dreamcatcher-last-visit");
+    const today = format(new Date(), 'yyyy-MM-dd');
+    
+    if (lastVisitDate !== today) {
+      setShowDreamPopup(true);
+      localStorage.setItem("dreamcatcher-last-visit", today);
+    }
+  }, []);
+
   const handleSaveDream = (dreamData: Omit<Dream, 'id'>) => {
     const newDream: Dream = {
       ...dreamData,
@@ -87,11 +101,11 @@ const Index = () => {
       case "entry":
         return <TagBasedDreamEntry onSaveDream={handleSaveDream} />;
       case "list":
-        return <DreamList dreams={dreams} />;
+        return <DreamList dreams={dreams} onAddEntry={() => setShowDreamPopup(true)} />;
       case "analytics":
         return <DreamAnalytics dreams={dreams} />;
       default:
-        return <TagBasedDreamEntry onSaveDream={handleSaveDream} />;
+        return <DreamList dreams={dreams} onAddEntry={() => setShowDreamPopup(true)} />;
     }
   };
 
@@ -119,6 +133,13 @@ const Index = () => {
           {renderContent()}
         </main>
       </div>
+      
+      {/* Dream Entry Popup */}
+      <DreamEntryPopup 
+        isOpen={showDreamPopup}
+        onClose={() => setShowDreamPopup(false)}
+        onSave={handleSaveDream}
+      />
       
       {/* Floating stars animation */}
       <div className="absolute inset-0 pointer-events-none">

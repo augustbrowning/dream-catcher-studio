@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, ArrowLeft, Lightbulb, ThumbsUp, ThumbsDown, Moon } from "lucide-react";
+import { Search, ArrowLeft, Lightbulb, ThumbsUp, ThumbsDown, Moon, Plus } from "lucide-react";
 import { format, differenceInDays, isToday, isYesterday, startOfDay } from "date-fns";
 
 interface Dream {
@@ -18,9 +18,10 @@ interface Dream {
 
 interface DreamListProps {
   dreams: Dream[];
+  onAddEntry?: () => void;
 }
 
-const DreamList = ({ dreams }: DreamListProps) => {
+const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
 
@@ -224,7 +225,7 @@ const DreamList = ({ dreams }: DreamListProps) => {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
+    <div className="relative w-full max-w-4xl mx-auto space-y-6 pb-20">
       {/* Search */}
       <div className="relative">
         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -317,6 +318,20 @@ const DreamList = ({ dreams }: DreamListProps) => {
             </p>
           </CardContent>
         </Card>
+      )}
+
+      {/* Fixed Add Entry Button */}
+      {onAddEntry && (
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+          <Button 
+            onClick={onAddEntry}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-full shadow-lg flex items-center gap-2"
+            size="lg"
+          >
+            <Plus className="h-5 w-5" />
+            Add Entry
+          </Button>
+        </div>
       )}
     </div>
   );
