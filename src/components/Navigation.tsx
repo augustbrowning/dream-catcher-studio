@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Moon, BookOpen, TrendingUp, Plus, Sparkles } from "lucide-react";
+import { Moon, BookOpen, TrendingUp, Plus, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NavigationProps {
   activeTab: string;
@@ -8,6 +9,8 @@ interface NavigationProps {
 }
 
 const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => {
+  const { signOut } = useAuth();
+
   return (
     <nav className="w-full bg-card/40 backdrop-blur-lg border-b border-primary/20 shadow-mystical">
       <div className="max-w-6xl mx-auto px-4 py-4">
@@ -52,6 +55,15 @@ const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => 
             >
               <TrendingUp className="h-4 w-4" />
               <span className="hidden sm:inline">Analytics</span>
+            </Button>
+            
+            <Button
+              variant="ghost"
+              onClick={signOut}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Sign Out</span>
             </Button>
           </div>
         </div>
