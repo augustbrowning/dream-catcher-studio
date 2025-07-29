@@ -29,9 +29,10 @@ const Index = () => {
 
   // Redirect to auth if not logged in
   useEffect(() => {
-    if (!loading && !user) {
-      navigate("/auth");
-    }
+    // Temporarily disabled for testing
+    // if (!loading && !user) {
+    //   navigate("/auth");
+    // }
   }, [user, loading, navigate]);
 
   // Show loading screen while checking authentication
@@ -55,9 +56,10 @@ const Index = () => {
   }
 
   // Don't render main content if user is not authenticated
-  if (!user) {
-    return null;
-  }
+  // Temporarily disabled for testing
+  // if (!user) {
+  //   return null;
+  // }
 
   // Load dreams from localStorage on component mount
   useEffect(() => {
