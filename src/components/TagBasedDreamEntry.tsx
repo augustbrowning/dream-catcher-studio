@@ -114,31 +114,31 @@ const TagBasedDreamEntry = ({ onSaveDream }: TagBasedDreamEntryProps) => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
+    <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2 sm:px-0">
       {/* Selected Tags Section */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-dream">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-center gap-2 text-xl bg-gradient-dream bg-clip-text text-transparent">
-            <Moon className="h-5 w-5 text-primary" />
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="flex items-center justify-center gap-2 text-lg sm:text-xl bg-gradient-dream bg-clip-text text-transparent">
+            <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             Selected Dream Tags ({selectedTags.length}/10)
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6">
           {selectedTags.length === 0 ? (
-            <p className="text-center text-muted-foreground py-4">
+            <p className="text-center text-muted-foreground py-4 text-sm sm:text-base">
               Select at least 3 tags to describe your dream
             </p>
           ) : (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1 sm:gap-2">
               {selectedTags.map((tag) => (
                 <Badge 
                   key={tag} 
                   variant="default" 
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer px-3 py-1"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer px-2 sm:px-3 py-1 text-xs sm:text-sm"
                   onClick={() => toggleTag(tag)}
                 >
                   {tag}
-                  <X className="h-3 w-3 ml-2" />
+                  <X className="h-3 w-3 ml-1 sm:ml-2" />
                 </Badge>
               ))}
             </div>
@@ -147,19 +147,19 @@ const TagBasedDreamEntry = ({ onSaveDream }: TagBasedDreamEntryProps) => {
       </Card>
 
       {/* Tag Categories */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {Object.entries(tagCategories).map(([category, tags]) => (
           <Card key={category} className="bg-card/60 backdrop-blur-lg border-primary/10">
-            <CardHeader className="pb-3">
-              <h3 className="text-lg font-semibold text-foreground">{category}</h3>
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-foreground">{category}</h3>
             </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="flex flex-wrap gap-1 sm:gap-2">
                 {tags.map((tag) => (
                   <Badge 
                     key={tag} 
                     variant={selectedTags.includes(tag) ? "default" : "outline"}
-                    className={`cursor-pointer transition-all duration-200 ${
+                    className={`cursor-pointer transition-all duration-200 text-xs sm:text-sm px-2 sm:px-3 py-1 ${
                       selectedTags.includes(tag) 
                         ? "bg-primary text-primary-foreground shadow-md" 
                         : "hover:bg-primary/10 border-primary/30"
@@ -176,25 +176,25 @@ const TagBasedDreamEntry = ({ onSaveDream }: TagBasedDreamEntryProps) => {
       </div>
 
       {/* Sticky Mood Selection and CTA */}
-      <div className="sticky bottom-4 z-10 space-y-4">
+      <div className="sticky bottom-4 z-10 space-y-3 sm:space-y-4 pb-4 sm:pb-0">
         <Card className="bg-card/95 backdrop-blur-lg border-primary/20 shadow-dream">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-center text-lg">How did this dream feel?</CardTitle>
+          <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
+            <CardTitle className="text-center text-base sm:text-lg">How did this dream feel?</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap justify-center gap-3">
+          <CardContent className="p-3 sm:p-6 pt-0">
+            <div className="grid grid-cols-4 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-3">
               {moodOptions.map((mood) => (
                 <button
                   key={mood.value}
                   onClick={() => setSelectedMood(mood.value)}
-                  className={`flex flex-col items-center p-3 rounded-lg border-2 transition-all duration-200 ${
+                  className={`flex flex-col items-center p-2 sm:p-3 rounded-lg border-2 transition-all duration-200 ${
                     selectedMood === mood.value
                       ? "border-primary bg-primary/10 shadow-md"
                       : "border-border hover:border-primary/50 hover:bg-primary/5"
                   }`}
                 >
-                  <span className="text-2xl mb-1">{mood.emoji}</span>
-                  <span className="text-sm font-medium">{mood.label}</span>
+                  <span className="text-lg sm:text-2xl mb-1">{mood.emoji}</span>
+                  <span className="text-xs sm:text-sm font-medium">{mood.label}</span>
                 </button>
               ))}
             </div>
@@ -203,12 +203,12 @@ const TagBasedDreamEntry = ({ onSaveDream }: TagBasedDreamEntryProps) => {
 
         <Button 
           onClick={handleSubmit} 
-          className="w-full" 
+          className="w-full text-sm sm:text-base" 
           variant="dream"
           size="lg"
           disabled={selectedTags.length < 3 || !selectedMood}
         >
-          <Sparkles className="h-4 w-4 mr-2" />
+          <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
           Save Dream to Journal
         </Button>
       </div>

@@ -110,8 +110,8 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
   // If viewing individual dream
   if (selectedDream) {
     return (
-      <div className="w-full max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center gap-4 mb-6">
+    <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2 sm:px-0">
+        <div className="flex items-center gap-4 mb-4 sm:mb-6">
           <Button 
             variant="ghost" 
             size="sm"
@@ -124,21 +124,21 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
         </div>
 
         <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl text-foreground flex items-center gap-3">
-                  <span className="text-3xl">{getMoodEmoji(selectedDream.mood)}</span>
-                  {selectedDream.title}
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-lg sm:text-2xl text-foreground flex items-start gap-2 sm:gap-3">
+                  <span className="text-2xl sm:text-3xl flex-shrink-0">{getMoodEmoji(selectedDream.mood)}</span>
+                  <span className="break-words">{selectedDream.title}</span>
                 </CardTitle>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-muted-foreground mt-1 text-sm sm:text-base">
                   {format(new Date(selectedDream.date), 'MMMM dd, yyyy')}
                 </p>
               </div>
-              <span className="text-4xl">{getMoodEmoji(selectedDream.mood)}</span>
+              <span className="text-3xl sm:text-4xl flex-shrink-0">{getMoodEmoji(selectedDream.mood)}</span>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
             {/* Tags */}
             {selectedDream.themes.length > 0 && (
               <div className="flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
                   <Badge 
                     key={theme} 
                     variant="outline" 
-                    className="bg-primary/10 border-primary/30 text-foreground"
+                    className="bg-primary/10 border-primary/30 text-foreground text-xs sm:text-sm"
                   >
                     {theme}
                   </Badge>
@@ -156,7 +156,7 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
 
             {/* Dream Description */}
             <div className="prose prose-sm max-w-none">
-              <p className="text-foreground/90 leading-relaxed text-lg">
+              <p className="text-foreground/90 leading-relaxed text-base sm:text-lg">
                 {selectedDream.description}
               </p>
             </div>
@@ -212,11 +212,11 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
   // Main journal view
   if (dreams.length === 0) {
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
-        <CardContent className="p-12 text-center">
-          <Moon className="h-16 w-16 mx-auto mb-4 text-primary/50" />
-          <h3 className="text-xl font-semibold mb-2 text-moonlight">No Dreams Yet</h3>
-          <p className="text-muted-foreground">
+      <Card className="w-full max-w-4xl mx-auto bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical mx-2 sm:mx-auto">
+        <CardContent className="p-6 sm:p-12 text-center">
+          <Moon className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-primary/50" />
+          <h3 className="text-lg sm:text-xl font-semibold mb-2 text-moonlight">No Dreams Yet</h3>
+          <p className="text-muted-foreground text-sm sm:text-base">
             Start capturing your dreams to build your personal dream journal and discover patterns in your subconscious mind.
           </p>
         </CardContent>
@@ -225,7 +225,7 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
   }
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto space-y-6 pb-20">
+    <div className="relative w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 pb-20 px-2 sm:px-0">
       {/* Search */}
       <div className="relative">
         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -233,19 +233,19 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
           placeholder="Search dreams..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 bg-card/50 backdrop-blur-sm border-primary/20 focus:border-primary/50"
+          className="pl-10 bg-card/50 backdrop-blur-sm border-primary/20 focus:border-primary/50 text-sm sm:text-base"
         />
       </div>
 
       {/* Days in a Row */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
-        <CardContent className="p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">DAYS IN A ROW</h3>
+        <CardContent className="p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">DAYS IN A ROW</h3>
           
-          <div className="flex justify-between items-end mb-4">
+          <div className="flex justify-between items-end mb-3 sm:mb-4 gap-1">
             {weekDays.map((day, index) => (
-              <div key={index} className="flex flex-col items-center space-y-2">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ${
+              <div key={index} className="flex flex-col items-center space-y-1 sm:space-y-2">
+                <div className={`w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${
                   day.hasDream 
                     ? 'bg-primary text-primary-foreground' 
                     : day.isToday 
@@ -260,8 +260,8 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
           </div>
           
           <div className="text-right">
-            <span className="text-2xl font-bold text-primary">{streak}</span>
-            <span className="text-sm text-muted-foreground ml-1">Total</span>
+            <span className="text-xl sm:text-2xl font-bold text-primary">{streak}</span>
+            <span className="text-xs sm:text-sm text-muted-foreground ml-1">Total</span>
           </div>
         </CardContent>
       </Card>
@@ -274,20 +274,20 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
             className="bg-card/60 backdrop-blur-lg border-primary/20 shadow-mystical hover:shadow-dream transition-all duration-300 hover:scale-[1.01] cursor-pointer"
             onClick={() => setSelectedDream(dream)}
           >
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">{getMoodEmoji(dream.mood)}</span>
-                  <span className="text-sm text-muted-foreground">
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-start justify-between mb-2 gap-2">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                  <span className="text-lg sm:text-xl flex-shrink-0">{getMoodEmoji(dream.mood)}</span>
+                  <span className="text-xs sm:text-sm text-muted-foreground truncate">
                     {format(new Date(dream.date), 'M-dd-yyyy')}
                   </span>
                 </div>
-                <span className="text-2xl">{getMoodEmoji(dream.mood)}</span>
+                <span className="text-xl sm:text-2xl flex-shrink-0">{getMoodEmoji(dream.mood)}</span>
               </div>
               
               {dream.themes.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {dream.themes.slice(0, 4).map((theme) => (
+                <div className="flex flex-wrap gap-1 sm:gap-2 mb-3">
+                  {dream.themes.slice(0, 3).map((theme) => (
                     <Badge 
                       key={theme} 
                       variant="outline" 
@@ -296,9 +296,9 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
                       {theme}
                     </Badge>
                   ))}
-                  {dream.themes.length > 4 && (
+                  {dream.themes.length > 3 && (
                     <Badge variant="outline" className="bg-muted/20 border-muted text-muted-foreground text-xs">
-                      +{dream.themes.length - 4}
+                      +{dream.themes.length - 3}
                     </Badge>
                   )}
                 </div>
@@ -322,14 +322,15 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
 
       {/* Fixed Add Entry Button */}
       {onAddEntry && (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="fixed bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-50">
           <Button 
             onClick={onAddEntry}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-full shadow-lg flex items-center gap-2"
-            size="lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 sm:px-8 py-2 sm:py-3 rounded-full shadow-lg flex items-center gap-2 text-sm sm:text-base"
+            size={window.innerWidth < 640 ? "default" : "lg"}
           >
-            <Plus className="h-5 w-5" />
-            Add Entry
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden xs:inline">Add Entry</span>
+            <span className="xs:hidden">Add</span>
           </Button>
         </div>
       )}

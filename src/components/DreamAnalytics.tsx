@@ -149,25 +149,25 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
   const currentThemes = getThemesByCategory(activeThemeCategory);
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-8 p-6">
+    <div className="w-full max-w-6xl mx-auto space-y-6 sm:space-y-8 p-2 sm:p-6">
       {/* Header - Dreams Recorded */}
       <div className="flex items-center justify-between">
         <div className="text-center flex-1">
-          <div className="text-6xl font-bold text-foreground mb-2">{dreams.length}</div>
-          <div className="text-lg text-muted-foreground">Dreams Recorded</div>
+          <div className="text-4xl sm:text-6xl font-bold text-foreground mb-2">{dreams.length}</div>
+          <div className="text-base sm:text-lg text-muted-foreground">Dreams Recorded</div>
         </div>
-        <X className="h-6 w-6 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
+        <X className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
       </div>
 
       {/* Dream Vibes Calendar */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
-        <CardContent className="p-6">
-          <h3 className="text-xl font-semibold mb-6 text-foreground">Dream Vibes</h3>
-          <div className="flex justify-between items-end">
+        <CardContent className="p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">Dream Vibes</h3>
+          <div className="flex justify-between items-end gap-1 sm:gap-2">
             {last10Days.map((day, index) => (
-              <div key={index} className="flex flex-col items-center space-y-2">
-                <div className="text-sm text-muted-foreground">{day.day}</div>
-                <div className="text-2xl">
+              <div key={index} className="flex flex-col items-center space-y-1 sm:space-y-2">
+                <div className="text-xs sm:text-sm text-muted-foreground">{day.day}</div>
+                <div className="text-lg sm:text-2xl">
                   {day.hasDream && day.mood ? 
                     MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] || "😐" : 
                     "💤"
@@ -175,9 +175,9 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
                 </div>
                 <div className="flex space-x-1">
                   {day.hasDream ? (
-                    <div className={`w-2 h-2 rounded-full ${day.mood ? MOOD_COLORS[day.mood as keyof typeof MOOD_COLORS] || 'bg-gray-300' : 'bg-gray-300'}`} />
+                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${day.mood ? MOOD_COLORS[day.mood as keyof typeof MOOD_COLORS] || 'bg-gray-300' : 'bg-gray-300'}`} />
                   ) : (
-                    <div className="w-2 h-2 rounded-full bg-gray-200" />
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gray-200" />
                   )}
                 </div>
               </div>
@@ -188,16 +188,16 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
 
       {/* Recurring Themes */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
-        <CardContent className="p-6">
-          <h3 className="text-xl font-semibold mb-6 text-foreground">Recurring Themes</h3>
+        <CardContent className="p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">Recurring Themes</h3>
           
           {/* Tab Navigation */}
-          <div className="flex space-x-1 mb-6 bg-muted/30 rounded-lg p-1">
+          <div className="flex flex-wrap gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1">
             {Object.keys(THEME_CATEGORIES).map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveThemeCategory(category as keyof typeof THEME_CATEGORIES)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-2 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                   activeThemeCategory === category
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -209,10 +209,12 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           </div>
 
           {/* Word Cloud Visualization */}
-          <div className="min-h-[200px] flex flex-wrap items-center justify-center gap-4 p-6">
+          <div className="min-h-[150px] sm:min-h-[200px] flex flex-wrap items-center justify-center gap-2 sm:gap-4 p-3 sm:p-6">
             {currentThemes.length > 0 ? (
               currentThemes.map(([theme, count], index) => {
-                const size = Math.max(14, Math.min(32, 14 + (count * 3)));
+                const baseSize = window.innerWidth < 640 ? 12 : 14;
+                const maxSize = window.innerWidth < 640 ? 24 : 32;
+                const size = Math.max(baseSize, Math.min(maxSize, baseSize + (count * 2)));
                 const opacity = Math.max(0.5, Math.min(1, 0.5 + (count * 0.1)));
                 return (
                   <span
@@ -229,7 +231,7 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
                 );
               })
             ) : (
-              <p className="text-muted-foreground text-center">
+              <p className="text-muted-foreground text-center text-sm sm:text-base">
                 No {activeThemeCategory} themes recorded yet
               </p>
             )}
@@ -273,20 +275,20 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
             </div>
           ) : (
             /* Connected State - Show actual correlations */
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
               {/* Joyful Dreams */}
               <div>
-                <h4 className="text-lg font-medium mb-4 text-foreground flex items-center gap-2">
-                  😊 Joyful Dreams
+                <h4 className="text-base sm:text-lg font-medium mb-3 sm:mb-4 text-foreground flex items-center gap-2">
+                  😊 <span className="hidden sm:inline">Joyful Dreams</span><span className="sm:hidden">Joyful</span>
                 </h4>
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {BEHAVIORAL_CORRELATIONS.joyful.map((item) => (
-                    <div key={item.activity} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
-                      <span className="text-sm">{item.activity}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">{item.percentage}%</span>
-                        <button className="text-xs text-muted-foreground hover:text-foreground">
-                          Remove Connection
+                    <div key={item.activity} className="flex items-center justify-between p-2 sm:p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                      <span className="text-xs sm:text-sm">{item.activity}</span>
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <span className="text-xs sm:text-sm font-medium">{item.percentage}%</span>
+                        <button className="text-xs text-muted-foreground hover:text-foreground hidden sm:inline">
+                          Remove
                         </button>
                       </div>
                     </div>
