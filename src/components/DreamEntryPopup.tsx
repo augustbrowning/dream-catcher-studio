@@ -111,26 +111,32 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
         </DialogHeader>
 
         <div className="space-y-6 p-1">
-          {/* How did you sleep? */}
+          {/* Dream Description Header */}
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">Describe Your Dream</h3>
               <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
             </div>
-            <p className="text-sm text-muted-foreground mb-3">Select all that apply</p>
-            <div className="flex gap-3">
-              {SLEEP_QUALITY.map((quality) => (
-                <button
-                  key={quality.id}
-                  onClick={() => setSleepQuality(quality.id)}
-                  className={`flex-1 p-3 rounded-lg border-2 transition-colors ${
-                    sleepQuality === quality.id ? quality.color : 'bg-muted border-muted'
-                  }`}
-                >
-                  {quality.label}
-                </button>
-              ))}
-            </div>
+            
+            {/* Selected tags display */}
+            {allSelectedTags.length > 0 ? (
+              <div className="mb-4">
+                <p className="text-sm text-muted-foreground mb-2">
+                  Selected ({allSelectedTags.length}/10) - Minimum 3 required
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {allSelectedTags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground mb-4">
+                Select at least 3 tags from the categories below
+              </p>
+            )}
           </div>
 
           {/* Sentiments */}
@@ -193,21 +199,6 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
             </div>
           </div>
 
-          {/* Selected tags summary */}
-          {allSelectedTags.length > 0 && (
-            <div className="border-t pt-4">
-              <p className="text-sm text-muted-foreground mb-2">
-                Selected ({allSelectedTags.length}/10) - Minimum 3 required
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {allSelectedTags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="text-xs">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Mood Selection - Sticky */}
           <div className="sticky bottom-0 bg-background border-t pt-4 -mx-1 px-1">
