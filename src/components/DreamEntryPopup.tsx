@@ -57,6 +57,9 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const [selectedActions, setSelectedActions] = useState<string[]>([]);
   const [selectedMood, setSelectedMood] = useState<string>('');
+  const [expandedSentiments, setExpandedSentiments] = useState<boolean>(false);
+  const [expandedPeople, setExpandedPeople] = useState<boolean>(false);
+  const [expandedActions, setExpandedActions] = useState<boolean>(false);
 
   const handleTagToggle = (tag: string, selectedTags: string[], setSelectedTags: (tags: string[]) => void) => {
     if (selectedTags.includes(tag)) {
@@ -148,7 +151,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           <div>
             <h3 className="text-lg font-medium mb-3">Sentiments</h3>
             <div className="flex flex-wrap gap-2">
-              {SENTIMENTS.map((sentiment) => (
+              {(expandedSentiments ? SENTIMENTS : SENTIMENTS.slice(0, 4)).map((sentiment) => (
                 <button
                   key={sentiment}
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
@@ -161,6 +164,14 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {sentiment}
                 </button>
               ))}
+              {SENTIMENTS.length > 4 && (
+                <button
+                  onClick={() => setExpandedSentiments(!expandedSentiments)}
+                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                >
+                  {expandedSentiments ? 'Less' : 'More'}
+                </button>
+              )}
             </div>
           </div>
 
@@ -168,7 +179,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           <div>
             <h3 className="text-lg font-medium mb-3">People</h3>
             <div className="flex flex-wrap gap-2">
-              {PEOPLE.map((person) => (
+              {(expandedPeople ? PEOPLE : PEOPLE.slice(0, 4)).map((person) => (
                 <button
                   key={person}
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
@@ -181,6 +192,14 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {person}
                 </button>
               ))}
+              {PEOPLE.length > 4 && (
+                <button
+                  onClick={() => setExpandedPeople(!expandedPeople)}
+                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                >
+                  {expandedPeople ? 'Less' : 'More'}
+                </button>
+              )}
             </div>
           </div>
 
@@ -188,7 +207,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           <div>
             <h3 className="text-lg font-medium mb-3">Actions</h3>
             <div className="flex flex-wrap gap-2">
-              {ACTIONS.map((action) => (
+              {(expandedActions ? ACTIONS : ACTIONS.slice(0, 4)).map((action) => (
                 <button
                   key={action}
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
@@ -201,6 +220,14 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {action}
                 </button>
               ))}
+              {ACTIONS.length > 4 && (
+                <button
+                  onClick={() => setExpandedActions(!expandedActions)}
+                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                >
+                  {expandedActions ? 'Less' : 'More'}
+                </button>
+              )}
             </div>
           </div>
 
