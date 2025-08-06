@@ -44,6 +44,11 @@ const ACTIONS = [
   'Flying', 'Running', 'Swimming', 'Dancing', 'Exploring'
 ];
 
+const PLACES = [
+  'Ocean', 'House', 'Living Room', 'Horizon', 'Car', 'Jungle',
+  'Gym', 'Seattle', 'Arizona', 'River', 'Desert', 'Park'
+];
+
 const MOOD_OPTIONS = [
   { emoji: '😢', value: 'sad' },
   { emoji: '😔', value: 'disappointed' },
@@ -57,16 +62,20 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
   const [selectedSentiments, setSelectedSentiments] = useState<string[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const [selectedActions, setSelectedActions] = useState<string[]>([]);
+  const [selectedPlaces, setSelectedPlaces] = useState<string[]>([]);
   const [selectedMood, setSelectedMood] = useState<string>('');
   const [expandedSentiments, setExpandedSentiments] = useState<boolean>(false);
   const [expandedPeople, setExpandedPeople] = useState<boolean>(false);
   const [expandedActions, setExpandedActions] = useState<boolean>(false);
+  const [expandedPlaces, setExpandedPlaces] = useState<boolean>(false);
   const [showCustomSentiment, setShowCustomSentiment] = useState<boolean>(false);
   const [showCustomPerson, setShowCustomPerson] = useState<boolean>(false);
   const [showCustomAction, setShowCustomAction] = useState<boolean>(false);
+  const [showCustomPlace, setShowCustomPlace] = useState<boolean>(false);
   const [customSentiment, setCustomSentiment] = useState<string>('');
   const [customPerson, setCustomPerson] = useState<string>('');
   const [customAction, setCustomAction] = useState<string>('');
+  const [customPlace, setCustomPlace] = useState<string>('');
 
   const handleTagToggle = (tag: string, selectedTags: string[], setSelectedTags: (tags: string[]) => void) => {
     if (selectedTags.includes(tag)) {
@@ -78,7 +87,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
     }
   };
 
-  const allSelectedTags = [...selectedSentiments, ...selectedPeople, ...selectedActions];
+  const allSelectedTags = [...selectedSentiments, ...selectedPeople, ...selectedActions, ...selectedPlaces];
   const canSubmit = allSelectedTags.length >= 3 && selectedMood;
 
   const handleSave = () => {
@@ -100,6 +109,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
     setSelectedSentiments([]);
     setSelectedPeople([]);
     setSelectedActions([]);
+    setSelectedPlaces([]);
     setSelectedMood('');
     onClose();
   };
@@ -344,6 +354,66 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               )}
             </div>
           </div>
+
+          {/* Places */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-medium">Places</h3>
+              <button
+                onClick={() => setShowCustomPlace(!showCustomPlace)}
+                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+              >
+                <Plus className="h-3 w-3" />
+                Add New
+              </button>
+            </div>
+            {showCustomPlace && (
+              <div className="mb-3 flex gap-2">
+                <Input
+                  placeholder="Enter custom place"
+                  value={customPlace}
+                  onChange={(e) => setCustomPlace(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace);
+                    }
+                  }}
+                  className="flex-1"
+                />
+                <Button
+                  size="sm"
+                  onClick={() => handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace)}
+                  disabled={!customPlace.trim()}
+                >
+                  Add
+                </Button>
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2">
+              {(expandedPlaces ? PLACES : PLACES.slice(0, 4)).map((place) => (
+                <button
+                  key={place}
+                  onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
+                  className={`px-4 py-2 rounded-full border transition-colors ${
+                    selectedPlaces.includes(place)
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-background border-border hover:bg-muted'
+                  }`}
+                >
+                  {place}
+                </button>
+              ))}
+              {PLACES.length > 4 && (
+                <button
+                  onClick={() => setExpandedPlaces(!expandedPlaces)}
+                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                >
+                  {expandedPlaces ? 'Less' : 'More'}
+                </button>
+              )}
+            </div>
+          </div>
+
 
 
           {/* Mood Selection - Sticky */}
