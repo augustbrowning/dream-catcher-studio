@@ -114,7 +114,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           {/* How did you sleep? */}
           <div>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">How did you sleep?</h3>
+              <h3 className="text-lg font-medium">Describe Your Dream</h3>
               <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
             </div>
             <p className="text-sm text-muted-foreground mb-3">Select all that apply</p>
