@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft, Plus } from "lucide-react";
 import { format } from "date-fns";
 
 interface Dream {
@@ -60,6 +61,12 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
   const [expandedSentiments, setExpandedSentiments] = useState<boolean>(false);
   const [expandedPeople, setExpandedPeople] = useState<boolean>(false);
   const [expandedActions, setExpandedActions] = useState<boolean>(false);
+  const [showCustomSentiment, setShowCustomSentiment] = useState<boolean>(false);
+  const [showCustomPerson, setShowCustomPerson] = useState<boolean>(false);
+  const [showCustomAction, setShowCustomAction] = useState<boolean>(false);
+  const [customSentiment, setCustomSentiment] = useState<string>('');
+  const [customPerson, setCustomPerson] = useState<string>('');
+  const [customAction, setCustomAction] = useState<string>('');
 
   const handleTagToggle = (tag: string, selectedTags: string[], setSelectedTags: (tags: string[]) => void) => {
     if (selectedTags.includes(tag)) {
@@ -95,6 +102,20 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
     setSelectedActions([]);
     setSelectedMood('');
     onClose();
+  };
+
+  const handleAddCustomTag = (
+    customValue: string,
+    selectedTags: string[],
+    setSelectedTags: (tags: string[]) => void,
+    setCustomValue: (value: string) => void,
+    setShowCustom: (show: boolean) => void
+  ) => {
+    if (customValue.trim() && !selectedTags.includes(customValue.trim()) && selectedTags.length < 10) {
+      setSelectedTags([...selectedTags, customValue.trim()]);
+      setCustomValue('');
+      setShowCustom(false);
+    }
   };
 
   const handleNoDreams = () => {
@@ -149,7 +170,38 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
           {/* Sentiments */}
           <div>
-            <h3 className="text-lg font-medium mb-3">Sentiments</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-medium">Sentiments</h3>
+              <button
+                onClick={() => setShowCustomSentiment(!showCustomSentiment)}
+                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+              >
+                <Plus className="h-3 w-3" />
+                Add New
+              </button>
+            </div>
+            {showCustomSentiment && (
+              <div className="mb-3 flex gap-2">
+                <Input
+                  placeholder="Enter custom sentiment"
+                  value={customSentiment}
+                  onChange={(e) => setCustomSentiment(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment);
+                    }
+                  }}
+                  className="flex-1"
+                />
+                <Button
+                  size="sm"
+                  onClick={() => handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment)}
+                  disabled={!customSentiment.trim()}
+                >
+                  Add
+                </Button>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
               {(expandedSentiments ? SENTIMENTS : SENTIMENTS.slice(0, 4)).map((sentiment) => (
                 <button
@@ -177,7 +229,38 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
           {/* People */}
           <div>
-            <h3 className="text-lg font-medium mb-3">People</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-medium">People</h3>
+              <button
+                onClick={() => setShowCustomPerson(!showCustomPerson)}
+                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+              >
+                <Plus className="h-3 w-3" />
+                Add New
+              </button>
+            </div>
+            {showCustomPerson && (
+              <div className="mb-3 flex gap-2">
+                <Input
+                  placeholder="Enter custom person"
+                  value={customPerson}
+                  onChange={(e) => setCustomPerson(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson);
+                    }
+                  }}
+                  className="flex-1"
+                />
+                <Button
+                  size="sm"
+                  onClick={() => handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson)}
+                  disabled={!customPerson.trim()}
+                >
+                  Add
+                </Button>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
               {(expandedPeople ? PEOPLE : PEOPLE.slice(0, 4)).map((person) => (
                 <button
@@ -205,7 +288,38 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
           {/* Actions */}
           <div>
-            <h3 className="text-lg font-medium mb-3">Actions</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-medium">Actions</h3>
+              <button
+                onClick={() => setShowCustomAction(!showCustomAction)}
+                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+              >
+                <Plus className="h-3 w-3" />
+                Add New
+              </button>
+            </div>
+            {showCustomAction && (
+              <div className="mb-3 flex gap-2">
+                <Input
+                  placeholder="Enter custom action"
+                  value={customAction}
+                  onChange={(e) => setCustomAction(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction);
+                    }
+                  }}
+                  className="flex-1"
+                />
+                <Button
+                  size="sm"
+                  onClick={() => handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction)}
+                  disabled={!customAction.trim()}
+                >
+                  Add
+                </Button>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
               {(expandedActions ? ACTIONS : ACTIONS.slice(0, 4)).map((action) => (
                 <button
