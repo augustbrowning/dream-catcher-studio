@@ -178,6 +178,65 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
             </div>
           </div>
 
+          {/* Places */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-medium">Places</h3>
+              <button
+                onClick={() => setShowCustomPlace(!showCustomPlace)}
+                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+              >
+                <Plus className="h-3 w-3" />
+                Add New
+              </button>
+            </div>
+            {showCustomPlace && (
+              <div className="mb-3 flex gap-2">
+                <Input
+                  placeholder="Enter custom place"
+                  value={customPlace}
+                  onChange={(e) => setCustomPlace(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace);
+                    }
+                  }}
+                  className="flex-1"
+                />
+                <Button
+                  size="sm"
+                  onClick={() => handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace)}
+                  disabled={!customPlace.trim()}
+                >
+                  Add
+                </Button>
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2">
+              {(expandedPlaces ? PLACES : PLACES.slice(0, 4)).map((place) => (
+                <button
+                  key={place}
+                  onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
+                  className={`px-4 py-2 rounded-full border transition-colors ${
+                    selectedPlaces.includes(place)
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-background border-border hover:bg-muted'
+                  }`}
+                >
+                  {place}
+                </button>
+              ))}
+              {PLACES.length > 4 && (
+                <button
+                  onClick={() => setExpandedPlaces(!expandedPlaces)}
+                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                >
+                  {expandedPlaces ? 'Less' : 'More'}
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Sentiments */}
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -354,67 +413,6 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               )}
             </div>
           </div>
-
-          {/* Places */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-medium">Places</h3>
-              <button
-                onClick={() => setShowCustomPlace(!showCustomPlace)}
-                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
-              >
-                <Plus className="h-3 w-3" />
-                Add New
-              </button>
-            </div>
-            {showCustomPlace && (
-              <div className="mb-3 flex gap-2">
-                <Input
-                  placeholder="Enter custom place"
-                  value={customPlace}
-                  onChange={(e) => setCustomPlace(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace);
-                    }
-                  }}
-                  className="flex-1"
-                />
-                <Button
-                  size="sm"
-                  onClick={() => handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace)}
-                  disabled={!customPlace.trim()}
-                >
-                  Add
-                </Button>
-              </div>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {(expandedPlaces ? PLACES : PLACES.slice(0, 4)).map((place) => (
-                <button
-                  key={place}
-                  onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
-                  className={`px-4 py-2 rounded-full border transition-colors ${
-                    selectedPlaces.includes(place)
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-background border-border hover:bg-muted'
-                  }`}
-                >
-                  {place}
-                </button>
-              ))}
-              {PLACES.length > 4 && (
-                <button
-                  onClick={() => setExpandedPlaces(!expandedPlaces)}
-                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
-                >
-                  {expandedPlaces ? 'Less' : 'More'}
-                </button>
-              )}
-            </div>
-          </div>
-
-
 
           {/* Mood Selection - Sticky */}
           <div className="sticky bottom-0 bg-background border-t pt-4 -mx-1 px-1">
