@@ -119,24 +119,29 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
             </div>
             
             {/* Selected tags display */}
-            {allSelectedTags.length > 0 ? (
-              <div className="mb-4">
-                <p className="text-sm text-muted-foreground mb-2">
-                  Selected ({allSelectedTags.length}/10) - Minimum 3 required
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {allSelectedTags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground mb-4">
-                Select at least 3 tags from the categories below
+            <div className="mb-4">
+              <p className="text-sm text-muted-foreground mb-2">
+                Selected ({allSelectedTags.length}/10) - Minimum 3 required
               </p>
-            )}
+              <div className="flex flex-wrap gap-2">
+                {/* Show selected tags first */}
+                {allSelectedTags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+                {/* Show empty placeholders for remaining slots up to 3 minimum */}
+                {Array.from({ length: Math.max(0, 3 - allSelectedTags.length) }).map((_, index) => (
+                  <Badge 
+                    key={`placeholder-${index}`} 
+                    variant="outline" 
+                    className="text-xs border-dashed border-muted-foreground/30 text-muted-foreground/50"
+                  >
+                    Tag {allSelectedTags.length + index + 1}
+                  </Badge>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Sentiments */}
