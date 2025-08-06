@@ -35,8 +35,8 @@ const SENTIMENTS = [
 ];
 
 const PEOPLE = [
-  'Alex', 'Pet', 'Sorceress', 'Skylar', 'Drew', 'Quinn',
-  'Morgan', 'Taylor', 'Casey', 'Riley', 'Jamie', 'Cameron'
+  'Coach', 'Stranger', 'Coworker', 'Neighbor', 'Teacher', 'Classmate',
+  'Future Self', 'Childhood Self', 'A Crowd'
 ];
 
 const ACTIONS = [
