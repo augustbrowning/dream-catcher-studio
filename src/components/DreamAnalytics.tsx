@@ -174,19 +174,12 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
                   {emoji}
                 </div>
               ))}
+              {/* Spacer for date row */}
+              <div className="w-8 h-6"></div>
             </div>
             
             {/* Grid of days */}
             <div className="flex-1">
-              {/* Date row */}
-              <div className="flex gap-1 mb-2">
-                {last10Days.map((day, index) => (
-                  <div key={index} className="w-8 h-6 text-xs text-center text-muted-foreground flex items-center justify-center">
-                    {day.day}
-                  </div>
-                ))}
-              </div>
-              
               {/* Sentiment grid rows */}
               {sentimentEmojis.map((emoji, emojiIndex) => (
                 <div key={emojiIndex} className="flex gap-1 mb-1">
@@ -208,6 +201,15 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
                   })}
                 </div>
               ))}
+              
+              {/* Date row at bottom */}
+              <div className="flex gap-1 mt-2">
+                {last10Days.map((day, index) => (
+                  <div key={index} className="w-8 h-6 text-xs text-center text-muted-foreground flex items-center justify-center">
+                    {day.day}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </CardContent>
