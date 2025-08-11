@@ -168,14 +168,14 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">Dream Vibes</h3>
           <div className="flex gap-4">
             {/* Sentiment emojis column */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col">
               {sentimentEmojis.map((emoji, index) => (
-                <div key={index} className="w-8 h-8 flex items-center justify-center text-xl">
+                <div key={index} className="w-8 h-8 flex items-center justify-center text-xl mb-1">
                   {emoji}
                 </div>
               ))}
               {/* Spacer for date row */}
-              <div className="w-8 h-6"></div>
+              <div className="w-8 h-6 mt-2"></div>
             </div>
             
             {/* Grid of days */}
