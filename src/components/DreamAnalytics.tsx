@@ -128,6 +128,9 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
     };
   });
 
+  // Define the 5 sentiment emojis for the grid
+  const sentimentEmojis = ["😊", "🤩", "😐", "😢", "😨"];
+
   // Calculate theme counts by category
   const getThemesByCategory = (category: keyof typeof THEME_CATEGORIES) => {
     const categoryThemes = THEME_CATEGORIES[category];
@@ -163,25 +166,49 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
         <CardContent className="p-4 sm:p-6">
           <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">Dream Vibes</h3>
-          <div className="flex justify-between items-end gap-1 sm:gap-2">
-            {last10Days.map((day, index) => (
-              <div key={index} className="flex flex-col items-center space-y-1 sm:space-y-2">
-                <div className="text-xs sm:text-sm text-muted-foreground">{day.day}</div>
-                <div className="text-lg sm:text-2xl">
-                  {day.hasDream && day.mood ? 
-                    MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] || "😐" : 
-                    "💤"
-                  }
+          <div className="flex gap-4">
+            {/* Sentiment emojis column */}
+            <div className="flex flex-col gap-2">
+              {sentimentEmojis.map((emoji, index) => (
+                <div key={index} className="w-8 h-8 flex items-center justify-center text-xl">
+                  {emoji}
                 </div>
-                <div className="flex space-x-1">
-                  {day.hasDream ? (
-                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${day.mood ? MOOD_COLORS[day.mood as keyof typeof MOOD_COLORS] || 'bg-gray-300' : 'bg-gray-300'}`} />
-                  ) : (
-                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gray-200" />
-                  )}
-                </div>
+              ))}
+            </div>
+            
+            {/* Grid of days */}
+            <div className="flex-1">
+              {/* Date row */}
+              <div className="flex gap-1 mb-2">
+                {last10Days.map((day, index) => (
+                  <div key={index} className="w-8 h-6 text-xs text-center text-muted-foreground flex items-center justify-center">
+                    {day.day}
+                  </div>
+                ))}
               </div>
-            ))}
+              
+              {/* Sentiment grid rows */}
+              {sentimentEmojis.map((emoji, emojiIndex) => (
+                <div key={emojiIndex} className="flex gap-1 mb-1">
+                  {last10Days.map((day, dayIndex) => {
+                    // Check if this day has a dream with this sentiment
+                    const hasThisSentiment = day.hasDream && day.mood && 
+                      MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] === emoji;
+                    
+                    return (
+                      <div 
+                        key={dayIndex} 
+                        className={`w-8 h-8 rounded ${
+                          hasThisSentiment 
+                            ? 'bg-green-500' 
+                            : 'bg-gray-200 dark:bg-gray-700'
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
