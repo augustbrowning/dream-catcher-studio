@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { X, Upload, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { format, subDays } from "date-fns";
 
 interface Dream {
@@ -73,6 +74,7 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
   const [activeThemeCategory, setActiveThemeCategory] = useState<keyof typeof THEME_CATEGORIES>("sensations");
   const [isDaylioConnected, setIsDaylioConnected] = useState(false);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handleDaylioImport = () => {
     // Create file input element
@@ -114,9 +116,10 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
     );
   }
 
-  // Generate last 10 days for dream vibes calendar
-  const last10Days = Array.from({ length: 10 }, (_, i) => {
-    const date = subDays(new Date(), 9 - i);
+  // Generate days for dream vibes calendar (responsive: 20 on desktop, 10 on mobile)
+  const numDays = isMobile ? 10 : 20;
+  const calendarDays = Array.from({ length: numDays }, (_, i) => {
+    const date = subDays(new Date(), numDays - 1 - i);
     const dreamOnDay = dreams.find(dream => 
       format(new Date(dream.date), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
     );
@@ -183,7 +186,7 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
               {/* Sentiment grid rows */}
               {sentimentEmojis.map((emoji, emojiIndex) => (
                 <div key={emojiIndex} className="flex gap-1 mb-1">
-                  {last10Days.map((day, dayIndex) => {
+                  {calendarDays.map((day, dayIndex) => {
                     // Check if this day has a dream with this sentiment
                     const hasThisSentiment = day.hasDream && day.mood && 
                       MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] === emoji;
@@ -204,7 +207,7 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
               
               {/* Date row at bottom */}
               <div className="flex gap-1 mt-2">
-                {last10Days.map((day, index) => (
+                {calendarDays.map((day, index) => (
                   <div key={index} className="w-8 h-6 text-xs text-center text-muted-foreground flex items-center justify-center">
                     {day.day}
                   </div>
