@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
+import { Capacitor } from '@capacitor/core';
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -34,7 +35,9 @@ const Auth = () => {
 
     try {
       if (isSignUp) {
-        const redirectUrl = `${window.location.origin}/`;
+        const isNative = Capacitor.isNativePlatform();
+        const redirectUrl = isNative ? 'app.lovable.2aa1f291973b419da1adc7f1b242259c://auth' : `${window.location.origin}/`;
+        
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -96,10 +99,13 @@ const Auth = () => {
   const handleGoogleAuth = async () => {
     setLoading(true);
     try {
+      const isNative = Capacitor.isNativePlatform();
+      const redirectTo = isNative ? 'app.lovable.2aa1f291973b419da1adc7f1b242259c://auth' : `${window.location.origin}/`;
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo
         }
       });
 
@@ -124,10 +130,13 @@ const Auth = () => {
   const handleAppleAuth = async () => {
     setLoading(true);
     try {
+      const isNative = Capacitor.isNativePlatform();
+      const redirectTo = isNative ? 'app.lovable.2aa1f291973b419da1adc7f1b242259c://auth' : `${window.location.origin}/`;
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'apple',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo
         }
       });
 
