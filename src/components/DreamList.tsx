@@ -284,12 +284,10 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
           >
             <CardContent className="p-3 sm:p-4">
               <div className="flex items-start justify-between mb-2 gap-2">
-                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                  <span className="text-xs sm:text-sm text-muted-foreground truncate">
-                    {format(new Date(dream.date), 'M-dd-yyyy')}
-                  </span>
-                </div>
                 <span className="text-xl sm:text-2xl flex-shrink-0">{getMoodEmoji(dream.mood)}</span>
+                <span className="text-xs sm:text-sm text-muted-foreground truncate">
+                  {format(new Date(dream.date), 'M-dd-yyyy')}
+                </span>
               </div>
               
               {dream.themes.length > 0 && (
