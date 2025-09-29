@@ -247,21 +247,43 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           </div>
 
           {/* Word Cloud Visualization */}
-          <div className="min-h-[150px] sm:min-h-[200px] flex flex-wrap items-center justify-center gap-2 sm:gap-4 p-3 sm:p-6">
+          <div className="min-h-[150px] sm:min-h-[200px] relative p-3 sm:p-6">
             {currentThemes.length > 0 ? (
               currentThemes.map(([theme, count], index) => {
                 const baseSize = window.innerWidth < 640 ? 12 : 14;
                 const maxSize = window.innerWidth < 640 ? 24 : 32;
                 const size = Math.max(baseSize, Math.min(maxSize, baseSize + (count * 2)));
                 const opacity = Math.max(0.5, Math.min(1, 0.5 + (count * 0.1)));
+                
+                // Generate random but deterministic position based on theme name
+                const seed = theme.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                const random = (offset: number) => ((seed * (offset + 1) * 9301 + 49297) % 233280) / 233280;
+                
+                // Grid-based positioning to reduce overlap (4x3 grid)
+                const gridSize = 4;
+                const gridX = (index % gridSize) / gridSize;
+                const gridY = Math.floor(index / gridSize) / Math.ceil(currentThemes.length / gridSize);
+                
+                // Add randomness within grid cell
+                const randomOffsetX = (random(1) - 0.5) * 20; // ±10%
+                const randomOffsetY = (random(2) - 0.5) * 20; // ±10%
+                const left = `${Math.max(5, Math.min(85, gridX * 100 + randomOffsetX))}%`;
+                const top = `${Math.max(5, Math.min(85, gridY * 100 + randomOffsetY))}%`;
+                
+                // Random rotation between -10 and 10 degrees
+                const rotation = (random(3) - 0.5) * 20;
+                
                 return (
                   <span
                     key={theme}
-                    className="cursor-pointer hover:text-primary transition-colors"
+                    className="cursor-pointer hover:text-primary transition-all absolute"
                     style={{
                       fontSize: `${size}px`,
                       opacity,
-                      fontWeight: count > 3 ? 'bold' : 'normal'
+                      fontWeight: count > 3 ? 'bold' : 'normal',
+                      left,
+                      top,
+                      transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
                     }}
                   >
                     {theme}
@@ -269,9 +291,11 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
                 );
               })
             ) : (
-              <p className="text-muted-foreground text-center text-sm sm:text-base">
-                No {activeThemeCategory} themes recorded yet
-              </p>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <p className="text-muted-foreground text-center text-sm sm:text-base">
+                  No {activeThemeCategory} themes recorded yet
+                </p>
+              </div>
             )}
           </div>
         </CardContent>
