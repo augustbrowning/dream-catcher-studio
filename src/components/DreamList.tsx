@@ -287,7 +287,7 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
               
               {dream.themes.length > 0 && (
                 <div className="flex flex-wrap gap-1 sm:gap-2 mb-3">
-                  {dream.themes.slice(0, 3).map((theme) => (
+                  {dream.themes.map((theme) => (
                     <Badge 
                       key={theme} 
                       variant="outline" 
@@ -296,11 +296,6 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
                       {theme}
                     </Badge>
                   ))}
-                  {dream.themes.length > 3 && (
-                    <Badge variant="outline" className="bg-muted/20 border-muted text-muted-foreground text-xs">
-                      +{dream.themes.length - 3}
-                    </Badge>
-                  )}
                 </div>
               )}
             </CardContent>
