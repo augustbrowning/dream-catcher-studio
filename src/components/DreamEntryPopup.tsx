@@ -134,7 +134,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] relative flex flex-col">
+      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] relative flex flex-col z-[100]">
         <DialogHeader className="border-b pb-4 pr-8">
           <div className="flex justify-between items-center">
             <DialogTitle className="text-lg font-medium">Describe Your Dream</DialogTitle>
