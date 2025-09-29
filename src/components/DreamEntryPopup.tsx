@@ -134,7 +134,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto relative">
+      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] relative flex flex-col">
         <DialogHeader className="border-b pb-4 pr-8">
           <div className="flex justify-between items-center">
             <DialogTitle className="text-lg font-medium">Describe Your Dream</DialogTitle>
@@ -142,7 +142,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           </div>
         </DialogHeader>
 
-        <div className="space-y-6 p-1 pb-64">
+        <div className="space-y-6 p-1 pb-64 overflow-y-auto flex-1">
           {/* Dream Description Header */}
           <div>
             
@@ -407,44 +407,44 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               )}
             </div>
           </div>
+        </div>
 
-          {/* Mood Selection - Sticky */}
-          <div className="absolute bottom-0 left-0 right-0 bg-background border-t pt-4 px-6 pb-4 z-10">
-            <div className="flex justify-center gap-4 mb-4">
-              {MOOD_OPTIONS.map((mood) => (
-                <button
-                  key={mood.value}
-                  onClick={() => setSelectedMood(mood.value)}
-                  className={`w-12 h-12 rounded-full border-2 transition-colors flex items-center justify-center text-2xl ${
-                    selectedMood === mood.value
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  {mood.emoji}
-                </button>
-              ))}
-            </div>
+        {/* Mood Selection - Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-background border-t pt-4 px-6 pb-4 z-10">
+          <div className="flex justify-center gap-4 mb-4">
+            {MOOD_OPTIONS.map((mood) => (
+              <button
+                key={mood.value}
+                onClick={() => setSelectedMood(mood.value)}
+                className={`w-12 h-12 rounded-full border-2 transition-colors flex items-center justify-center text-2xl ${
+                  selectedMood === mood.value
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border hover:border-primary/50'
+                }`}
+              >
+                {mood.emoji}
+              </button>
+            ))}
+          </div>
 
-            <div className="space-y-3">
-              <Button 
-                onClick={handleSave}
-                disabled={!canSubmit}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
-                size="lg"
-              >
-                Log Dream
-              </Button>
-              
-              <Button 
-                onClick={handleNoDreams}
-                variant="outline" 
-                className="w-full"
-                size="lg"
-              >
-                No Dreams To Log
-              </Button>
-            </div>
+          <div className="space-y-3">
+            <Button 
+              onClick={handleSave}
+              disabled={!canSubmit}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
+              size="lg"
+            >
+              Log Dream
+            </Button>
+            
+            <Button 
+              onClick={handleNoDreams}
+              variant="outline" 
+              className="w-full"
+              size="lg"
+            >
+              No Dreams To Log
+            </Button>
           </div>
         </div>
       </DialogContent>
