@@ -328,8 +328,8 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
             size={window.innerWidth < 640 ? "default" : "lg"}
           >
             <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="hidden xs:inline">Add Entry</span>
-            <span className="xs:hidden">Add</span>
+            <span className="hidden xs:inline">New Entry</span>
+            <span className="xs:hidden">New</span>
           </Button>
         </div>
       )}
