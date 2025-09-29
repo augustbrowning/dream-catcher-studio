@@ -233,7 +233,7 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
           placeholder="Search dreams..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 bg-card/50 backdrop-blur-sm border-primary/20 focus:border-primary/50 text-sm sm:text-base"
+          className="pl-10 bg-card/50 border-primary/20 focus:border-primary/50 text-sm sm:text-base"
         />
       </div>
 
