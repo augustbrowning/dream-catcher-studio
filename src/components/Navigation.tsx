@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Moon, BookOpen, TrendingUp, Plus, LogOut } from "lucide-react";
+import { Moon, BookOpen, TrendingUp, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 interface NavigationProps {
@@ -26,15 +26,6 @@ const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => 
           </div>
           
           <div className="flex items-center gap-1 sm:gap-2">
-            <Button
-              variant={activeTab === "entry" ? "dream" : "ethereal"}
-              onClick={() => onTabChange("entry")}
-              className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4"
-              size="sm"
-            >
-              <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline sm:inline">New</span>
-            </Button>
             
             <Button
               variant={activeTab === "list" ? "dream" : "ethereal"}
