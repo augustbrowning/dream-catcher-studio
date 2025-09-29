@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { X, Upload, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -73,6 +74,7 @@ const BEHAVIORAL_CORRELATIONS = {
 const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
   const [activeThemeCategory, setActiveThemeCategory] = useState<keyof typeof THEME_CATEGORIES>("sensations");
   const [isDaylioConnected, setIsDaylioConnected] = useState(false);
+  const [timePeriod, setTimePeriod] = useState<string>("all-time");
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
@@ -221,7 +223,19 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
       {/* Recurring Themes */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
         <CardContent className="p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">Recurring Themes</h3>
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h3 className="text-lg sm:text-xl font-semibold text-foreground">Recurring Themes</h3>
+            <Select value={timePeriod} onValueChange={setTimePeriod}>
+              <SelectTrigger className="w-[130px] sm:w-[140px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="last-week">Last Week</SelectItem>
+                <SelectItem value="last-month">Last Month</SelectItem>
+                <SelectItem value="all-time">All Time</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           
           {/* Tab Navigation */}
           <div className="flex flex-wrap justify-center gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1">
