@@ -170,23 +170,6 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
                       }.
                     </p>
                   </div>
-
-                  {/* Request Feature */}
-                  <div className="border-t border-primary/20 pt-4">
-                    <p className="text-sm text-muted-foreground mb-3">Request Feature</p>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
-                          <ThumbsUp className="h-4 w-4" />
-                          Yes Please!
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
-                          <ThumbsDown className="h-4 w-4" />
-                          No Thanks
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>
