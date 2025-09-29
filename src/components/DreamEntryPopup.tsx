@@ -221,7 +221,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPlaces.includes(place)
-                      ? 'bg-primary text-primary-foreground border-primary'
+                      ? 'border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
@@ -280,7 +280,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedSentiments.includes(sentiment)
-                      ? 'bg-primary text-primary-foreground border-primary'
+                      ? 'border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
@@ -339,7 +339,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPeople.includes(person)
-                      ? 'bg-primary text-primary-foreground border-primary'
+                      ? 'border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
@@ -398,7 +398,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedActions.includes(action)
-                      ? 'bg-primary text-primary-foreground border-primary'
+                      ? 'border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
@@ -416,7 +416,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
             </div>
           </div>
 
-          {/* Mood Selection - Sticky */}
+          {/* Mood Selection - Fixed */}
           <div className="fixed bottom-0 left-0 right-0 bg-background border-t pt-4 px-6 pb-4 max-w-3xl mx-auto">
             <div className="flex justify-center gap-4 mb-4">
               {MOOD_OPTIONS.map((mood) => (
