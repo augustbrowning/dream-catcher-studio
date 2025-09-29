@@ -134,15 +134,16 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="border-b pb-4 pr-8">
+      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] flex flex-col p-0">
+        <DialogHeader className="sticky top-0 z-10 bg-background border-b pb-4 pr-8 pt-6 px-6">
           <div className="flex justify-between items-center">
             <DialogTitle className="text-lg font-medium">Describe Your Dream</DialogTitle>
             <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
           </div>
         </DialogHeader>
 
-        <div className="space-y-6 p-1">
+        <div className="overflow-y-auto flex-1 px-6 pb-6">
+          <div className="space-y-6 p-1">
           {/* Dream Description Header */}
           <div>
             
@@ -446,6 +447,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </Button>
             </div>
           </div>
+        </div>
         </div>
       </DialogContent>
     </Dialog>
