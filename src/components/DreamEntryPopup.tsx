@@ -409,7 +409,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           </div>
 
           {/* Mood Selection - Sticky */}
-          <div className="sticky bottom-0 bg-background border-t pt-4 -mx-1 px-1">
+          <div className="sticky bottom-0 left-0 right-0 bg-background border-t pt-4 -mx-1 px-1 pb-1">
             <div className="flex justify-center gap-4 mb-4">
               {MOOD_OPTIONS.map((mood) => (
                 <button
