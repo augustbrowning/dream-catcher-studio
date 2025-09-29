@@ -224,7 +224,7 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">Recurring Themes</h3>
           
           {/* Tab Navigation */}
-          <div className="flex flex-wrap gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1">
+          <div className="flex flex-wrap justify-center gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1">
             {Object.keys(THEME_CATEGORIES).map((category) => (
               <button
                 key={category}
