@@ -217,7 +217,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={place}
                   onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
-                  className={`p-1 rounded-full border text-sm transition-colors ${
+                  className={`px-4 py-2 rounded-full border text-sm transition-colors ${
                     selectedPlaces.includes(place)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
@@ -276,7 +276,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={sentiment}
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
-                  className={`p-1 rounded-full border text-sm transition-colors ${
+                  className={`px-4 py-2 rounded-full border text-sm transition-colors ${
                     selectedSentiments.includes(sentiment)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
@@ -335,7 +335,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={person}
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
-                  className={`p-1 rounded-full border text-sm transition-colors ${
+                  className={`px-4 py-2 rounded-full border text-sm transition-colors ${
                     selectedPeople.includes(person)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
@@ -394,7 +394,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={action}
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
-                  className={`p-1 rounded-full border text-sm transition-colors ${
+                  className={`px-4 py-2 rounded-full border text-sm transition-colors ${
                     selectedActions.includes(action)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
