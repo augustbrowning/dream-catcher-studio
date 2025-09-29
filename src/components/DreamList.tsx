@@ -148,13 +148,6 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
               </div>
             )}
 
-            {/* Dream Description */}
-            <div className="prose prose-sm max-w-none">
-              <p className="text-foreground/90 leading-relaxed text-base sm:text-lg">
-                {selectedDream.description}
-              </p>
-            </div>
-
             {/* Dream Analysis Section */}
             <Card className="bg-card/50 border-primary/20">
               <CardContent className="p-6">
