@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { format } from "date-fns";
@@ -133,7 +133,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent className="max-w-3xl mx-auto max-h-[90vh] relative flex flex-col">
         <DialogHeader className="border-b pb-4 pr-8">
           <div className="flex justify-between items-center">
@@ -141,6 +141,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
             <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
           </div>
         </DialogHeader>
+        <DialogDescription className="sr-only">Describe your dream, select tags, and choose a mood before logging.</DialogDescription>
 
         <div className="space-y-6 p-1 pb-64 overflow-y-auto flex-1">
           {/* Dream Description Header */}
