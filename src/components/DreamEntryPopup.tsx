@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { format } from "date-fns";
@@ -133,17 +133,16 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] relative flex flex-col z-[100]">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b pb-4 pr-8">
           <div className="flex justify-between items-center">
             <DialogTitle className="text-lg font-medium">Describe Your Dream</DialogTitle>
             <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
           </div>
         </DialogHeader>
-        <DialogDescription className="sr-only">Describe your dream, select tags, and choose a mood before logging.</DialogDescription>
 
-        <div className="space-y-6 p-1 pb-64 overflow-y-auto flex-1">
+        <div className="space-y-6 p-1">
           {/* Dream Description Header */}
           <div>
             
@@ -408,44 +407,44 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               )}
             </div>
           </div>
-        </div>
 
-        {/* Mood Selection - Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-background border-t pt-4 px-6 pb-4 z-10">
-          <div className="flex justify-center gap-4 mb-4">
-            {MOOD_OPTIONS.map((mood) => (
-              <button
-                key={mood.value}
-                onClick={() => setSelectedMood(mood.value)}
-                className={`w-12 h-12 rounded-full border-2 transition-colors flex items-center justify-center text-2xl ${
-                  selectedMood === mood.value
-                    ? 'border-primary bg-primary/10'
-                    : 'border-border hover:border-primary/50'
-                }`}
+          {/* Mood Selection - Sticky */}
+          <div className="sticky bottom-0 left-0 right-0 bg-background border-t pt-4 -mx-1 px-1 pb-1">
+            <div className="flex justify-center gap-4 mb-4">
+              {MOOD_OPTIONS.map((mood) => (
+                <button
+                  key={mood.value}
+                  onClick={() => setSelectedMood(mood.value)}
+                  className={`w-12 h-12 rounded-full border-2 transition-colors flex items-center justify-center text-2xl ${
+                    selectedMood === mood.value
+                      ? 'border-primary bg-primary/10'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  {mood.emoji}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-3">
+              <Button 
+                onClick={handleSave}
+                disabled={!canSubmit}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
+                size="lg"
               >
-                {mood.emoji}
-              </button>
-            ))}
-          </div>
-
-          <div className="space-y-3">
-            <Button 
-              onClick={handleSave}
-              disabled={!canSubmit}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
-              size="lg"
-            >
-              Log Dream
-            </Button>
-            
-            <Button 
-              onClick={handleNoDreams}
-              variant="outline" 
-              className="w-full"
-              size="lg"
-            >
-              No Dreams To Log
-            </Button>
+                Log Dream
+              </Button>
+              
+              <Button 
+                onClick={handleNoDreams}
+                variant="outline" 
+                className="w-full"
+                size="lg"
+              >
+                No Dreams To Log
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
