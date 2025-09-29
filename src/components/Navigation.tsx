@@ -12,7 +12,7 @@ const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => 
   const { signOut } = useAuth();
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-card/40 backdrop-blur-lg border-b border-primary/20 shadow-mystical">
+    <nav className="fixed top-0 z-50 w-full bg-card/40 backdrop-blur-lg border-b border-primary/20 shadow-mystical">
       <div className="max-w-6xl mx-auto px-2 sm:px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">

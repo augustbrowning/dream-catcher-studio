@@ -124,7 +124,7 @@ const Index = () => {
           dreamCount={dreams.length}
         />
         
-        <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 pt-20 sm:pt-24">
           {renderContent()}
         </main>
       </div>
