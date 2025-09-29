@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent/20 hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        dream: "bg-gradient-mystical text-foreground shadow-dream hover:shadow-glow-primary hover:scale-105 animate-glow-pulse",
+        dream: "bg-gradient-mystical text-foreground shadow-dream hover:shadow-glow-primary hover:scale-105",
         ethereal: "bg-card/30 backdrop-blur-md border border-primary/20 text-foreground hover:bg-primary/10 hover:border-primary/40",
       },
       size: {
