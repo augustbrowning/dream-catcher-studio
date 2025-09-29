@@ -221,7 +221,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPlaces.includes(place)
-                      ? 'border-border opacity-75'
+                      ? 'bg-muted border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
@@ -280,7 +280,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedSentiments.includes(sentiment)
-                      ? 'border-border opacity-75'
+                      ? 'bg-muted border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
@@ -339,7 +339,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPeople.includes(person)
-                      ? 'border-border opacity-75'
+                      ? 'bg-muted border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
@@ -398,7 +398,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedActions.includes(action)
-                      ? 'border-border opacity-75'
+                      ? 'bg-muted border-border opacity-75'
                       : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
