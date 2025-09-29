@@ -244,7 +244,7 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           
           {/* Tab Navigation */}
           <ScrollArea className="w-full">
-            <div className="flex gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1 min-w-min">
+            <div className="flex gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1 min-w-min sm:justify-center">
               {Object.keys(THEME_CATEGORIES).map((category) => (
                 <button
                   key={category}
