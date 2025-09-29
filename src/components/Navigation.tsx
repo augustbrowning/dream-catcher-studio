@@ -23,11 +23,6 @@ const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => 
                 <span className="sm:hidden">Dreams</span>
               </h1>
             </div>
-            {dreamCount > 0 && (
-              <span className="hidden sm:inline text-sm text-muted-foreground bg-primary/10 px-2 py-1 rounded-full">
-                {dreamCount} dreams captured
-              </span>
-            )}
           </div>
           
           <div className="flex items-center gap-1 sm:gap-2">
