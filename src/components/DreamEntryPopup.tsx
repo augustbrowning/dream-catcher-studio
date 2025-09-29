@@ -213,7 +213,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedPlaces ? PLACES : PLACES.slice(0, 4)).map((place) => (
+              {(expandedPlaces ? PLACES : PLACES).map((place) => (
                 <button
                   key={place}
                   onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
@@ -226,15 +226,17 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {place}
                 </button>
               ))}
-              {PLACES.length > 4 && (
+            </div>
+            {PLACES.length > 4 && (
+              <div className="flex mt-2">
                 <button
                   onClick={() => setExpandedPlaces(!expandedPlaces)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedPlaces ? 'Less' : 'More'}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Sentiments */}
@@ -272,7 +274,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedSentiments ? SENTIMENTS : SENTIMENTS.slice(0, 4)).map((sentiment) => (
+              {(expandedSentiments ? SENTIMENTS : SENTIMENTS).map((sentiment) => (
                 <button
                   key={sentiment}
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
@@ -285,15 +287,17 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {sentiment}
                 </button>
               ))}
-              {SENTIMENTS.length > 4 && (
+            </div>
+            {SENTIMENTS.length > 4 && (
+              <div className="flex mt-2">
                 <button
                   onClick={() => setExpandedSentiments(!expandedSentiments)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedSentiments ? 'Less' : 'More'}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* People */}
@@ -331,7 +335,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedPeople ? PEOPLE : PEOPLE.slice(0, 4)).map((person) => (
+              {(expandedPeople ? PEOPLE : PEOPLE).map((person) => (
                 <button
                   key={person}
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
@@ -344,15 +348,17 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {person}
                 </button>
               ))}
-              {PEOPLE.length > 4 && (
+            </div>
+            {PEOPLE.length > 4 && (
+              <div className="flex mt-2">
                 <button
                   onClick={() => setExpandedPeople(!expandedPeople)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedPeople ? 'Less' : 'More'}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Actions */}
@@ -390,7 +396,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedActions ? ACTIONS : ACTIONS.slice(0, 4)).map((action) => (
+              {(expandedActions ? ACTIONS : ACTIONS).map((action) => (
                 <button
                   key={action}
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
@@ -403,15 +409,17 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {action}
                 </button>
               ))}
-              {ACTIONS.length > 4 && (
+            </div>
+            {ACTIONS.length > 4 && (
+              <div className="flex mt-2">
                 <button
                   onClick={() => setExpandedActions(!expandedActions)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedActions ? 'Less' : 'More'}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Mood Selection - Sticky */}
