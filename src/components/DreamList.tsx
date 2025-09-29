@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -244,29 +245,32 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
         <CardContent className="p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">DAYS IN A ROW</h3>
           
-          <div className="flex justify-between items-end gap-2 sm:gap-3">
-            {(isMobile ? weekDays.slice(2) : weekDays).map((day, index) => (
-              <div key={index} className="flex flex-col items-center space-y-1 sm:space-y-2">
-                <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base font-bold ${
-                  day.hasDream 
-                    ? 'bg-primary text-primary-foreground' 
-                    : day.isToday 
-                      ? 'bg-muted border-2 border-primary text-foreground' 
-                      : 'bg-muted text-muted-foreground'
-                }`}>
-                  {day.date}
+          <ScrollArea className="w-full">
+            <div className="flex justify-between items-end gap-2 sm:gap-3 min-w-min sm:min-w-0">
+              {weekDays.map((day, index) => (
+                <div key={index} className="flex flex-col items-center space-y-1 sm:space-y-2 flex-shrink-0">
+                  <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base font-bold ${
+                    day.hasDream 
+                      ? 'bg-primary text-primary-foreground' 
+                      : day.isToday 
+                        ? 'bg-muted border-2 border-primary text-foreground' 
+                        : 'bg-muted text-muted-foreground'
+                  }`}>
+                    {day.date}
+                  </div>
+                  <span className="text-sm text-muted-foreground">{day.day}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">{day.day}</span>
+              ))}
+              
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2 flex-shrink-0">
+                <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center text-xl sm:text-2xl font-bold text-primary">
+                  {streak}
+                </div>
+                <span className="text-sm text-muted-foreground">Total</span>
               </div>
-            ))}
-            
-            <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center text-xl sm:text-2xl font-bold text-primary">
-                {streak}
-              </div>
-              <span className="text-sm text-muted-foreground">Total</span>
             </div>
-          </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </CardContent>
       </Card>
 
