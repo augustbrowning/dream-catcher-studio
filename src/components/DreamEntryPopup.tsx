@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { format } from "date-fns";
 
 interface Dream {
@@ -136,21 +136,15 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b pb-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <DialogTitle className="text-xl font-semibold">DreamJournal</DialogTitle>
+          <div className="flex justify-between items-center">
+            <DialogTitle className="text-lg font-medium">Describe Your Dream</DialogTitle>
+            <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
           </div>
         </DialogHeader>
 
         <div className="space-y-6 p-1">
           {/* Dream Description Header */}
           <div>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">Describe Your Dream</h3>
-              <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
-            </div>
             
             {/* Selected tags display */}
             <div className="mb-4">
