@@ -116,8 +116,8 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
     );
   }
 
-  // Generate days for dream vibes calendar (responsive: 20 on desktop, 10 on mobile)
-  const numDays = isMobile ? 10 : 20;
+  // Generate days for dream vibes calendar (responsive: 20 on desktop, 7 on mobile)
+  const numDays = isMobile ? 7 : 20;
   const calendarDays = Array.from({ length: numDays }, (_, i) => {
     const date = subDays(new Date(), numDays - 1 - i);
     const dreamOnDay = dreams.find(dream => 
