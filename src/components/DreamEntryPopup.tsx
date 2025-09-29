@@ -134,7 +134,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto relative">
         <DialogHeader className="border-b pb-4 pr-8">
           <div className="flex justify-between items-center">
             <DialogTitle className="text-lg font-medium">Describe Your Dream</DialogTitle>
@@ -142,7 +142,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           </div>
         </DialogHeader>
 
-        <div className="space-y-6 p-1">
+        <div className="space-y-6 p-1 pb-64">
           {/* Dream Description Header */}
           <div>
             
@@ -407,9 +407,10 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               )}
             </div>
           </div>
+        </div>
 
-          {/* Mood Selection - Sticky */}
-          <div className="sticky bottom-0 left-0 right-0 bg-background border-t pt-4 -mx-1 px-1 pb-1">
+        {/* Mood Selection - Bottom Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-background border-t pt-4 px-6 pb-4">
             <div className="flex justify-center gap-4 mb-4">
               {MOOD_OPTIONS.map((mood) => (
                 <button
@@ -443,8 +444,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 size="lg"
               >
                 No Dreams To Log
-              </Button>
-            </div>
+            </Button>
           </div>
         </div>
       </DialogContent>
