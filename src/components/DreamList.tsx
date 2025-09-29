@@ -125,17 +125,11 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
 
         <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
           <CardHeader className="p-4 sm:p-6">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-lg sm:text-2xl text-foreground flex items-start gap-2 sm:gap-3">
-                  <span className="text-2xl sm:text-3xl flex-shrink-0">{getMoodEmoji(selectedDream.mood)}</span>
-                  <span className="break-words">{selectedDream.title}</span>
-                </CardTitle>
-                <p className="text-muted-foreground mt-1 text-sm sm:text-base">
-                  {format(new Date(selectedDream.date), 'MMMM dd, yyyy')}
-                </p>
-              </div>
-              <span className="text-3xl sm:text-4xl flex-shrink-0">{getMoodEmoji(selectedDream.mood)}</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-2xl sm:text-3xl flex-shrink-0">{getMoodEmoji(selectedDream.mood)}</span>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                {format(new Date(selectedDream.date), 'MMMM dd, yyyy')}
+              </p>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
