@@ -30,14 +30,11 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
 
   const getMoodEmoji = (mood: string) => {
     const moodMap: Record<string, string> = {
-      joyful: "😊",
-      peaceful: "😌",
-      exciting: "🤩",
-      mysterious: "🔮",
-      scary: "😰",
       sad: "😢",
-      confused: "😵",
-      neutral: "😐"
+      disappointed: "😔",
+      neutral: "😐",
+      content: "🙂",
+      joyful: "😊"
     };
     return moodMap[mood] || "😐";
   };
