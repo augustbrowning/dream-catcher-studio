@@ -76,9 +76,9 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
       }
     }
 
-    // Generate week view (last 7 days)
+    // Generate week view (last 5 days)
     const weekDays = [];
-    for (let i = 6; i >= 0; i--) {
+    for (let i = 4; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dayStart = startOfDay(date);
@@ -242,10 +242,10 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
         <CardContent className="p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">DAYS IN A ROW</h3>
           
-          <div className="flex justify-between items-end mb-3 sm:mb-4 gap-1">
+          <div className="flex justify-between items-end gap-2 sm:gap-3">
             {weekDays.map((day, index) => (
               <div key={index} className="flex flex-col items-center space-y-1 sm:space-y-2">
-                <div className={`w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${
+                <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xs sm:text-base font-bold ${
                   day.hasDream 
                     ? 'bg-primary text-primary-foreground' 
                     : day.isToday 
@@ -257,11 +257,13 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
                 <span className="text-xs text-muted-foreground">{day.day}</span>
               </div>
             ))}
-          </div>
-          
-          <div className="text-right">
-            <span className="text-xl sm:text-2xl font-bold text-primary">{streak}</span>
-            <span className="text-xs sm:text-sm text-muted-foreground ml-1">Total</span>
+            
+            <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center text-lg sm:text-2xl font-bold text-primary">
+                {streak}
+              </div>
+              <span className="text-xs text-muted-foreground">Total</span>
+            </div>
           </div>
         </CardContent>
       </Card>
