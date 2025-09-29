@@ -158,15 +158,6 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6 sm:space-y-8 p-2 sm:p-6">
-      {/* Header - Dreams Recorded */}
-      <div className="flex items-center justify-between">
-        <div className="text-center flex-1">
-          <div className="text-4xl sm:text-6xl font-bold text-foreground mb-2">{dreams.length}</div>
-          <div className="text-base sm:text-lg text-muted-foreground">Dreams Recorded</div>
-        </div>
-        <X className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
-      </div>
-
       {/* Dream Vibes Calendar */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
         <CardContent className="p-4 sm:p-6">
