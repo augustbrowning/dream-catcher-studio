@@ -228,7 +228,7 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
     <div className="relative w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 pb-20 px-2 sm:px-0">
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-3 top-3 h-4 w-4 text-foreground" />
         <Input
           placeholder="Search dreams..."
           value={searchTerm}
