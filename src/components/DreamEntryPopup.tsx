@@ -229,7 +229,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {PLACES.length > 4 && (
                 <button
                   onClick={() => setExpandedPlaces(!expandedPlaces)}
-                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
                 >
                   {expandedPlaces ? 'Less' : 'More'}
                 </button>
@@ -288,7 +288,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {SENTIMENTS.length > 4 && (
                 <button
                   onClick={() => setExpandedSentiments(!expandedSentiments)}
-                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
                 >
                   {expandedSentiments ? 'Less' : 'More'}
                 </button>
@@ -347,7 +347,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {PEOPLE.length > 4 && (
                 <button
                   onClick={() => setExpandedPeople(!expandedPeople)}
-                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
                 >
                   {expandedPeople ? 'Less' : 'More'}
                 </button>
@@ -406,7 +406,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {ACTIONS.length > 4 && (
                 <button
                   onClick={() => setExpandedActions(!expandedActions)}
-                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
                 >
                   {expandedActions ? 'Less' : 'More'}
                 </button>
