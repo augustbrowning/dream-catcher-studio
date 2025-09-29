@@ -243,21 +243,24 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           </div>
           
           {/* Tab Navigation */}
-          <div className="flex flex-wrap justify-center gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1">
-            {Object.keys(THEME_CATEGORIES).map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveThemeCategory(category as keyof typeof THEME_CATEGORIES)}
-                className={`px-2 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
-                  activeThemeCategory === category
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
-          </div>
+          <ScrollArea className="w-full">
+            <div className="flex gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1 min-w-min">
+              {Object.keys(THEME_CATEGORIES).map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveThemeCategory(category as keyof typeof THEME_CATEGORIES)}
+                  className={`px-2 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
+                    activeThemeCategory === category
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </button>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
 
           {/* Word Cloud Visualization */}
           <div className="min-h-[150px] sm:min-h-[200px] relative p-3 sm:p-6">
