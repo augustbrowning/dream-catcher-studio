@@ -324,7 +324,7 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
         <div className="fixed bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-50">
           <Button 
             onClick={onAddEntry}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 sm:px-8 py-2 sm:py-3 rounded-full shadow-lg flex items-center gap-2 text-sm sm:text-base"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg flex items-center gap-2 text-sm sm:text-base"
             size={window.innerWidth < 640 ? "default" : "lg"}
           >
             <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
