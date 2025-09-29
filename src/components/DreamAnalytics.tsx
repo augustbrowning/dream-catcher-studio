@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { X, Upload, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -173,38 +174,41 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
             </div>
             
             {/* Grid of days */}
-            <div className="flex-1">
-              {/* Sentiment grid rows */}
-              {sentimentEmojis.map((emoji, emojiIndex) => (
-                <div key={emojiIndex} className="flex gap-1 mb-1">
-                  {calendarDays.map((day, dayIndex) => {
-                    // Check if this day has a dream with this sentiment
-                    const hasThisSentiment = day.hasDream && day.mood && 
-                      MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] === emoji;
-                    
-                    return (
-                      <div 
-                        key={dayIndex} 
-                        className={`w-8 h-8 rounded ${
-                          hasThisSentiment 
-                            ? 'bg-green-500' 
-                            : 'bg-gray-200 dark:bg-gray-700'
-                        }`}
-                      />
-                    );
-                  })}
-                </div>
-              ))}
-              
-              {/* Date row at bottom */}
-              <div className="flex gap-1 mt-2">
-                {calendarDays.map((day, index) => (
-                  <div key={index} className="w-8 h-6 text-xs text-center text-muted-foreground flex items-center justify-center">
-                    {day.day}
+            <ScrollArea className="flex-1">
+              <div className="min-w-min">
+                {/* Sentiment grid rows */}
+                {sentimentEmojis.map((emoji, emojiIndex) => (
+                  <div key={emojiIndex} className="flex gap-1 mb-1">
+                    {calendarDays.map((day, dayIndex) => {
+                      // Check if this day has a dream with this sentiment
+                      const hasThisSentiment = day.hasDream && day.mood && 
+                        MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] === emoji;
+                      
+                      return (
+                        <div 
+                          key={dayIndex} 
+                          className={`w-8 h-8 rounded flex-shrink-0 ${
+                            hasThisSentiment 
+                              ? 'bg-green-500' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}
+                        />
+                      );
+                    })}
                   </div>
                 ))}
+                
+                {/* Date row at bottom */}
+                <div className="flex gap-1 mt-2">
+                  {calendarDays.map((day, index) => (
+                    <div key={index} className="w-8 h-6 text-xs text-center text-muted-foreground flex items-center justify-center flex-shrink-0">
+                      {day.day}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
           </div>
         </CardContent>
       </Card>
