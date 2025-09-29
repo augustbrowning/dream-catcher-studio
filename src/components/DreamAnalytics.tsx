@@ -184,12 +184,24 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
                       const hasThisSentiment = day.hasDream && day.mood && 
                         MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] === emoji;
                       
+                      // Get color based on mood
+                      const getMoodColor = (mood: string) => {
+                        switch(mood) {
+                          case 'joyful': return 'bg-green-500';
+                          case 'content': return 'bg-green-500/70';
+                          case 'neutral': return 'bg-gray-400';
+                          case 'disappointed': return 'bg-red-500/70';
+                          case 'sad': return 'bg-red-500';
+                          default: return 'bg-gray-200 dark:bg-gray-700';
+                        }
+                      };
+                      
                       return (
                         <div 
                           key={dayIndex} 
                           className={`w-8 h-8 rounded flex-shrink-0 ${
                             hasThisSentiment 
-                              ? 'bg-green-500' 
+                              ? getMoodColor(day.mood as string)
                               : 'bg-gray-200 dark:bg-gray-700'
                           }`}
                         />
