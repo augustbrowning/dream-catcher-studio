@@ -135,7 +135,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="border-b pb-4">
+        <DialogHeader className="border-b pb-4 pr-8">
           <div className="flex justify-between items-center">
             <DialogTitle className="text-lg font-medium">Describe Your Dream</DialogTitle>
             <span className="text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
