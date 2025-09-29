@@ -162,7 +162,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               <div className="flex flex-wrap gap-2">
                 {/* Show selected tags first */}
                 {allSelectedTags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="text-sm">
+                  <Badge key={tag} variant="default" className="text-sm">
                     {tag}
                   </Badge>
                 ))}
