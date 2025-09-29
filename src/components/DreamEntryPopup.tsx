@@ -142,7 +142,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
           </div>
         </DialogHeader>
 
-        <div className="overflow-y-auto flex-1 px-6 pb-6">
+        <div className="overflow-y-auto flex-1 px-6 pb-48">
           <div className="space-y-6 p-1">
           {/* Dream Description Header */}
           <div>
