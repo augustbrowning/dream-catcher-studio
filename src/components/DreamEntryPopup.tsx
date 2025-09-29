@@ -226,17 +226,15 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {place}
                 </button>
               ))}
-            </div>
-            {PLACES.length > 4 && (
-              <div className="flex mt-2">
+              {PLACES.length > 4 && (
                 <button
                   onClick={() => setExpandedPlaces(!expandedPlaces)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedPlaces ? 'Less' : 'More'}
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Sentiments */}
@@ -287,17 +285,15 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {sentiment}
                 </button>
               ))}
-            </div>
-            {SENTIMENTS.length > 4 && (
-              <div className="flex mt-2">
+              {SENTIMENTS.length > 4 && (
                 <button
                   onClick={() => setExpandedSentiments(!expandedSentiments)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedSentiments ? 'Less' : 'More'}
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* People */}
@@ -348,17 +344,15 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {person}
                 </button>
               ))}
-            </div>
-            {PEOPLE.length > 4 && (
-              <div className="flex mt-2">
+              {PEOPLE.length > 4 && (
                 <button
                   onClick={() => setExpandedPeople(!expandedPeople)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedPeople ? 'Less' : 'More'}
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Actions */}
@@ -409,17 +403,15 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {action}
                 </button>
               ))}
-            </div>
-            {ACTIONS.length > 4 && (
-              <div className="flex mt-2">
+              {ACTIONS.length > 4 && (
                 <button
                   onClick={() => setExpandedActions(!expandedActions)}
                   className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedActions ? 'Less' : 'More'}
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Mood Selection - Sticky */}
