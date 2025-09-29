@@ -134,7 +134,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg mx-auto max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b pb-4">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={onClose}>
