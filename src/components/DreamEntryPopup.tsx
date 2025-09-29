@@ -76,6 +76,10 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
   const [customPerson, setCustomPerson] = useState<string>('');
   const [customAction, setCustomAction] = useState<string>('');
   const [customPlace, setCustomPlace] = useState<string>('');
+  const [customSentiments, setCustomSentiments] = useState<string[]>([]);
+  const [customPeople, setCustomPeople] = useState<string[]>([]);
+  const [customActions, setCustomActions] = useState<string[]>([]);
+  const [customPlaces, setCustomPlaces] = useState<string[]>([]);
 
   const handleTagToggle = (tag: string, selectedTags: string[], setSelectedTags: (tags: string[]) => void) => {
     if (selectedTags.includes(tag)) {
@@ -119,9 +123,12 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
     selectedTags: string[],
     setSelectedTags: (tags: string[]) => void,
     setCustomValue: (value: string) => void,
-    setShowCustom: (show: boolean) => void
+    setShowCustom: (show: boolean) => void,
+    customTagsList: string[],
+    setCustomTagsList: (tags: string[]) => void
   ) => {
-    if (customValue.trim() && !selectedTags.includes(customValue.trim()) && selectedTags.length < 10) {
+    if (customValue.trim() && !selectedTags.includes(customValue.trim()) && !customTagsList.includes(customValue.trim()) && selectedTags.length < 10) {
+      setCustomTagsList([...customTagsList, customValue.trim()]);
       setSelectedTags([...selectedTags, customValue.trim()]);
       setCustomValue('');
       setShowCustom(false);
@@ -193,14 +200,14 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onChange={(e) => setCustomPlace(e.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
-                      handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace);
+                      handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace, customPlaces, setCustomPlaces);
                     }
                   }}
                   className="flex-1"
                 />
                 <Button
                   size="sm"
-                  onClick={() => handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace)}
+                  onClick={() => handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace, customPlaces, setCustomPlaces)}
                   disabled={!customPlace.trim()}
                 >
                   Add
@@ -208,7 +215,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedPlaces ? PLACES : PLACES).map((place) => (
+              {[...PLACES, ...customPlaces].map((place) => (
                 <button
                   key={place}
                   onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
@@ -252,14 +259,14 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onChange={(e) => setCustomSentiment(e.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
-                      handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment);
+                      handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment, customSentiments, setCustomSentiments);
                     }
                   }}
                   className="flex-1"
                 />
                 <Button
                   size="sm"
-                  onClick={() => handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment)}
+                  onClick={() => handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment, customSentiments, setCustomSentiments)}
                   disabled={!customSentiment.trim()}
                 >
                   Add
@@ -267,7 +274,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedSentiments ? SENTIMENTS : SENTIMENTS).map((sentiment) => (
+              {[...SENTIMENTS, ...customSentiments].map((sentiment) => (
                 <button
                   key={sentiment}
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
@@ -311,14 +318,14 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onChange={(e) => setCustomPerson(e.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
-                      handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson);
+                      handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson, customPeople, setCustomPeople);
                     }
                   }}
                   className="flex-1"
                 />
                 <Button
                   size="sm"
-                  onClick={() => handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson)}
+                  onClick={() => handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson, customPeople, setCustomPeople)}
                   disabled={!customPerson.trim()}
                 >
                   Add
@@ -326,7 +333,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedPeople ? PEOPLE : PEOPLE).map((person) => (
+              {[...PEOPLE, ...customPeople].map((person) => (
                 <button
                   key={person}
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
@@ -370,14 +377,14 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   onChange={(e) => setCustomAction(e.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
-                      handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction);
+                      handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction, customActions, setCustomActions);
                     }
                   }}
                   className="flex-1"
                 />
                 <Button
                   size="sm"
-                  onClick={() => handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction)}
+                  onClick={() => handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction, customActions, setCustomActions)}
                   disabled={!customAction.trim()}
                 >
                   Add
@@ -385,7 +392,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {(expandedActions ? ACTIONS : ACTIONS).map((action) => (
+              {[...ACTIONS, ...customActions].map((action) => (
                 <button
                   key={action}
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
