@@ -169,7 +169,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   <Badge 
                     key={`placeholder-${index}`} 
                     variant="outline" 
-                    className="text-xs border-dashed border-muted-foreground/30 text-muted-foreground/50"
+                    className="text-sm border-dashed border-muted-foreground/30 text-muted-foreground/50"
                   >
                     Tag {allSelectedTags.length + index + 1}
                   </Badge>
