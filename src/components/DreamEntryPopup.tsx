@@ -222,7 +222,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPlaces.includes(place)
                       ? 'border-border opacity-75'
-                      : 'bg-background border-border hover:opacity-75'
+                      : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
                   {place}
@@ -281,7 +281,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedSentiments.includes(sentiment)
                       ? 'border-border opacity-75'
-                      : 'bg-background border-border hover:opacity-75'
+                      : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
                   {sentiment}
@@ -340,7 +340,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPeople.includes(person)
                       ? 'border-border opacity-75'
-                      : 'bg-background border-border hover:opacity-75'
+                      : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
                   {person}
@@ -399,7 +399,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedActions.includes(action)
                       ? 'border-border opacity-75'
-                      : 'bg-background border-border hover:opacity-75'
+                      : 'bg-background border-border hover:bg-muted'
                   }`}
                 >
                   {action}
