@@ -26,8 +26,8 @@ const MOOD_EMOJIS = {
   joyful: "😊",
   peaceful: "😌",
   exciting: "🤩", 
-  mysterious: "🤔",
-  scary: "😨",
+  mysterious: "🔮",
+  scary: "😰",
   sad: "😢",
   confused: "😵",
   neutral: "😐"
@@ -133,8 +133,8 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
     };
   });
 
-  // Define the 5 sentiment emojis for the grid
-  const sentimentEmojis = ["😊", "🤩", "😐", "😢", "😨"];
+  // Define the sentiment emojis for the grid (matching dream entry moods)
+  const sentimentEmojis = ["😊", "🤩", "🔮", "😰", "😢"];
 
   // Calculate theme counts by category
   const getThemesByCategory = (category: keyof typeof THEME_CATEGORIES) => {
