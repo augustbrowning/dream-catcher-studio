@@ -217,7 +217,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={place}
                   onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
-                  className={`px-2 py-1 rounded-full border text-sm transition-colors ${
+                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPlaces.includes(place)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
@@ -229,7 +229,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {PLACES.length > 4 && (
                 <button
                   onClick={() => setExpandedPlaces(!expandedPlaces)}
-                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedPlaces ? 'Less' : 'More'}
                 </button>
@@ -276,7 +276,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={sentiment}
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
-                  className={`px-2 py-1 rounded-full border text-sm transition-colors ${
+                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedSentiments.includes(sentiment)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
@@ -288,7 +288,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {SENTIMENTS.length > 4 && (
                 <button
                   onClick={() => setExpandedSentiments(!expandedSentiments)}
-                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedSentiments ? 'Less' : 'More'}
                 </button>
@@ -335,7 +335,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={person}
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
-                  className={`px-2 py-1 rounded-full border text-sm transition-colors ${
+                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedPeople.includes(person)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
@@ -347,7 +347,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {PEOPLE.length > 4 && (
                 <button
                   onClick={() => setExpandedPeople(!expandedPeople)}
-                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedPeople ? 'Less' : 'More'}
                 </button>
@@ -394,7 +394,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                 <button
                   key={action}
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
-                  className={`px-2 py-1 rounded-full border text-sm transition-colors ${
+                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
                     selectedActions.includes(action)
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:bg-muted'
@@ -406,7 +406,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               {ACTIONS.length > 4 && (
                 <button
                   onClick={() => setExpandedActions(!expandedActions)}
-                  className="px-4 py-2 rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors"
+                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
                 >
                   {expandedActions ? 'Less' : 'More'}
                 </button>
