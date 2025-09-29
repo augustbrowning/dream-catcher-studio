@@ -25,8 +25,7 @@ const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => 
             </div>
           </div>
           
-          <div className="flex items-center gap-1 sm:gap-2">
-            
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1 sm:gap-2">
             <Button
               variant={activeTab === "list" ? "dream" : "ethereal"}
               onClick={() => onTabChange("list")}
@@ -46,7 +45,9 @@ const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => 
               <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
               <span className="hidden sm:inline">Analytics</span>
             </Button>
-            
+          </div>
+          
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button
               variant="ghost"
               onClick={signOut}
