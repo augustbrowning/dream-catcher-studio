@@ -261,7 +261,7 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
           </ScrollArea>
 
           {/* Word Cloud Visualization */}
-          <div className="min-h-[150px] sm:min-h-[200px] relative p-3 sm:p-6">
+          <div aria-label={`Word cloud of recurring ${activeThemeCategory} themes`} className="min-h-[150px] sm:min-h-[200px] relative p-3 sm:p-6">
             {wordCloudWords.length > 0 ? (
               <ReactWordcloud 
                 words={wordCloudWords}
