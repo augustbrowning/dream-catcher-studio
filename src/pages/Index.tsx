@@ -27,6 +27,31 @@ const Index = () => {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [showDreamPopup, setShowDreamPopup] = useState(false);
 
+  // Editable tag lists
+const initialSentiments = [
+  'Nervous', 'Intrigued', 'Inquisitive', 'Eager', 'Pondering',
+  'Uneasy', 'Engaged', 'Wondering', 'Fascinated', 'Questioning'
+];
+const initialPeople = [
+  'Coach', 'Stranger', 'Coworker', 'Neighbor', 'Teacher', 'Classmate',
+  'Future Self', 'Childhood Self', 'A Crowd'
+];
+const initialActions = [
+  'Dreaming', 'Reflecting', 'Driving', 'Sketching', 'Creating',
+  'Flying', 'Running', 'Swimming', 'Dancing', 'Exploring'
+];
+const initialPlaces = [
+  'Ocean', 'House', 'Living Room', 'Horizon', 'Car', 'Jungle',
+  'Gym', 'Seattle', 'Arizona', 'River', 'Desert', 'Park'
+];
+
+const [themeCategories, setThemeCategories] = useState<Record<string, string[]>>({
+  Sentiments: initialSentiments,
+  People: initialPeople,
+  Actions: initialActions,
+  Places: initialPlaces,
+});
+
   // Load dreams from localStorage on component mount
   useEffect(() => {
     const savedDreams = localStorage.getItem("dreamcatcher-dreams");
@@ -98,7 +123,7 @@ const Index = () => {
       case "list":
         return <DreamList dreams={dreams} onAddEntry={() => setShowDreamPopup(true)} />;
       case "analytics":
-        return <DreamAnalytics dreams={dreams} />;
+        return <DreamAnalytics dreams={dreams} themeCategories={themeCategories}/>;
       default:
         return <DreamList dreams={dreams} onAddEntry={() => setShowDreamPopup(true)} />;
     }
@@ -132,6 +157,8 @@ const Index = () => {
       {/* Dream Entry Popup */}
       <DreamEntryPopup 
         isOpen={showDreamPopup}
+        themeCategories={themeCategories}
+        setThemeCategories={setThemeCategories}
         onClose={() => setShowDreamPopup(false)}
         onSave={handleSaveDream}
       />
