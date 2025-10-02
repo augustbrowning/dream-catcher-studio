@@ -6,6 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { format } from "date-fns";
+import * as constants from "./dreamEntryConstants";
+import styles from './dreamEntryPopup.module.scss';
 
 interface Dream {
   id: string;
@@ -25,21 +27,12 @@ interface DreamEntryPopupProps {
   setThemeCategories: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
 }
 
-const SLEEP_QUALITY = [
-  { id: 'poor', label: 'Poor', color: 'bg-red-100 border-red-300 text-red-800' },
-  { id: 'fair', label: 'Fair', color: 'bg-yellow-100 border-yellow-300 text-yellow-800' },
-  { id: 'good', label: 'Good', color: 'bg-green-100 border-green-300 text-green-800' }
-];
-
-const MOOD_OPTIONS = [
-  { emoji: '😢', value: 'sad' },
-  { emoji: '😔', value: 'disappointed' },
-  { emoji: '😐', value: 'neutral' },
-  { emoji: '🙂', value: 'content' },
-  { emoji: '😊', value: 'joyful' }
-];
-
 const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCategories }: DreamEntryPopupProps) => {
+  // Error states for custom tag inputs
+  const [customSentimentError, setCustomSentimentError] = useState<string>('');
+  const [customPersonError, setCustomPersonError] = useState<string>('');
+  const [customActionError, setCustomActionError] = useState<string>('');
+  const [customPlaceError, setCustomPlaceError] = useState<string>('');
   // Editable tag state
   const [sleepQuality, setSleepQuality] = useState<string>('');
   const [selectedSentiments, setSelectedSentiments] = useState<string[]>([]);
@@ -59,10 +52,6 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
   const [customPerson, setCustomPerson] = useState<string>('');
   const [customAction, setCustomAction] = useState<string>('');
   const [customPlace, setCustomPlace] = useState<string>('');
-  const [customSentiments, setCustomSentiments] = useState<string[]>([]);
-  const [customPeople, setCustomPeople] = useState<string[]>([]);
-  const [customActions, setCustomActions] = useState<string[]>([]);
-  const [customPlaces, setCustomPlaces] = useState<string[]>([]);
 
   const handleTagToggle = (tag: string, selectedTags: string[], setSelectedTags: (tags: string[]) => void) => {
     if (selectedTags.includes(tag)) {
@@ -107,20 +96,39 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
     setSelectedTags: (tags: string[]) => void,
     setCustomValue: (value: string) => void,
     setShowCustom: (show: boolean) => void,
-    customTagsList: string[],
-    setCustomTagsList: (tags: string[]) => void
+    category: 'Sentiments' | 'People' | 'Actions' | 'Places',
+    setError: (msg: string) => void
   ) => {
-    if (customValue.trim() && !selectedTags.includes(customValue.trim()) && !customTagsList.includes(customValue.trim()) && selectedTags.length < 10) {
-      setCustomTagsList([...customTagsList, customValue.trim()]);
-      setSelectedTags([...selectedTags, customValue.trim()]);
-      // Also add to main tag list for the relevant category
-      if (setCustomTagsList === setCustomSentiments) setThemeCategories(prev => ({ ...prev, Sentiments: [...prev.Sentiments, customValue.trim()] }));
-      if (setCustomTagsList === setCustomPeople) setThemeCategories(prev => ({ ...prev, People: [...prev.People, customValue.trim()] }));
-      if (setCustomTagsList === setCustomActions) setThemeCategories(prev => ({ ...prev, Actions: [...prev.Actions, customValue.trim()] }));
-      if (setCustomTagsList === setCustomPlaces) setThemeCategories(prev => ({ ...prev, Places: [...prev.Places, customValue.trim()] }));
-      setCustomValue('');
-      setShowCustom(false);
+    const trimmed = customValue.trim();
+    if (!trimmed || selectedTags.length >= 10) return;
+
+    // Lowercase for duplicate check
+    const lower = trimmed.toLowerCase();
+    const selectedLower = selectedTags.map(t => t.toLowerCase());
+    const mainLower = themeCategories[category].map(t => t.toLowerCase());
+
+    // Check for duplicates in all lists (case-insensitive)
+    if (selectedLower.includes(lower) || mainLower.includes(lower)) {
+      setError(constants.ERROR_TAG_EXISTS);
+      return;
     }
+
+    // Add the tag and expand if needed
+    setThemeCategories(prev => {
+      const newList = [...prev[category], trimmed];
+      // Expand if new length exceeds SHORT_LIST_TAG_COUNT
+      if (newList.length > constants.SHORT_LIST_TAG_COUNT) {
+        if (category === 'Sentiments') setExpandedSentiments(true);
+        if (category === 'People') setExpandedPeople(true);
+        if (category === 'Actions') setExpandedActions(true);
+        if (category === 'Places') setExpandedPlaces(true);
+      }
+      return { ...prev, [category]: newList };
+    });
+    setSelectedTags([...selectedTags, trimmed]);
+    setCustomValue('');
+    setShowCustom(false);
+    setError('');
   };
 
   const handleNoDreams = () => {
@@ -129,285 +137,305 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl mx-auto max-h-[90vh] flex flex-col p-0">
+      <DialogContent className={styles.dreamEntryPopup}>
         <DialogHeader className="sticky top-0 z-10 bg-background border-b pb-4 pt-6 px-6 pr-12 rounded-t-lg">
           <div className="flex items-center gap-4">
             <DialogTitle className="text-sm sm:text-lg font-medium">Describe Your Dream</DialogTitle>
             <span className="text-xs sm:text-sm text-muted-foreground">{format(new Date(), 'M-dd-yyyy')}</span>
           </div>
         </DialogHeader>
-
-        <div className="overflow-y-auto flex-1 px-6 pb-[264px]">
-          <div className="space-y-6 p-1">
-          {/* Dream Description Header */}
-          <div>
-            
-            {/* Selected tags display */}
-            <div className="mb-4">
-              <p className="text-sm text-muted-foreground mb-2">
-                Selected ({allSelectedTags.length}/10) - Minimum 3 required
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {/* Show selected tags first */}
-                {allSelectedTags.map((tag) => (
-                  <Badge key={tag} variant="default" className="text-sm font-normal">
-                    {tag}
-                  </Badge>
-                ))}
-                {/* Show empty placeholders for remaining slots up to 3 minimum */}
-                {Array.from({ length: Math.max(0, 3 - allSelectedTags.length) }).map((_, index) => (
-                  <Badge 
-                    key={`placeholder-${index}`} 
-                    variant="outline" 
-                    className="text-sm border-dashed border-muted-foreground/30 text-muted-foreground/50"
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <div style={{ flex: 1, overflowY: 'auto' }} className="px-6">
+            <div className="space-y-6 p-1">
+              {/* Dream Description Header */}
+              <div>
+                {/* Selected tags display */}
+                <div className="mb-4">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {constants.SELECTED_TAGS_LABEL(allSelectedTags.length)}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {/* Show selected tags first */}
+                    {allSelectedTags.map((tag) => (
+                      <Badge key={tag} variant="default" className="text-sm font-normal">
+                        {tag}
+                      </Badge>
+                    ))}
+                    {/* Show empty placeholders for remaining slots up to 3 minimum */}
+                    {Array.from({ length: Math.max(0, 3 - allSelectedTags.length) }).map((_, index) => (
+                      <Badge 
+                        key={`placeholder-${index}`} 
+                        variant="outline" 
+                        className="text-sm border-dashed border-muted-foreground/30 text-muted-foreground/50"
+                      >
+                        {constants.TAG_PLACEHOLDER(allSelectedTags.length + index + 1)}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* Places */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-medium">Places</h3>
+                  <button
+                    onClick={() => setShowCustomPlace(!showCustomPlace)}
+                    className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
                   >
-                    Tag {allSelectedTags.length + index + 1}
-                  </Badge>
-                ))}
+                    <Plus className="h-3 w-3" />
+                    {constants.ADD_NEW}
+                  </button>
+                </div>
+                {showCustomPlace && (
+                  <div className="mb-3 flex flex-col gap-1">
+                    <form
+                      className={styles.customInputRow}
+                      onSubmit={e => {
+                        e.preventDefault();
+                        handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace, 'Places', setCustomPlaceError);
+                      }}
+                    >
+                      <Input
+                        placeholder="Enter custom place"
+                        value={customPlace}
+                        onChange={(e) => { setCustomPlace(e.target.value); setCustomPlaceError(''); }}
+                        className="flex-1"
+                      />
+                      <Button
+                        size="sm"
+                        type="submit"
+                        disabled={!customPlace.trim()}
+                      >
+                        {constants.ADD}
+                      </Button>
+                    </form>
+                    {customPlaceError && <span className={styles.customInputError}>{customPlaceError}</span>}
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {(themeCategories.Places
+                    .slice(0, expandedPlaces ? undefined : constants.SHORT_LIST_TAG_COUNT)
+                  ).map((place) => (
+                    <button
+                      key={place}
+                      onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
+                      className={
+                        selectedPlaces.includes(place)
+                          ? `${styles.tagButton} ${styles.selected}`
+                          : styles.tagButton
+                      }
+                    >
+                      {place}
+                    </button>
+                  ))}
+                  {themeCategories.Places.length > constants.SHORT_LIST_TAG_COUNT && (
+                    <button
+                      onClick={() => setExpandedPlaces(!expandedPlaces)}
+                      className={styles.moreLessButton}
+                    >
+                      {expandedPlaces ? constants.LESS : constants.MORE}
+                    </button>
+                  )}
+                </div>
+              </div>
+              {/* Sentiments */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-medium">Sentiments</h3>
+                  <button
+                    onClick={() => setShowCustomSentiment(!showCustomSentiment)}
+                    className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+                  >
+                    <Plus className="h-3 w-3" />
+                    {constants.ADD_NEW}
+                  </button>
+                </div>
+                {showCustomSentiment && (
+                  <div className="mb-3 flex flex-col gap-1">
+                    <form
+                      className={styles.customInputRow}
+                      onSubmit={e => {
+                        e.preventDefault();
+                        handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment, 'Sentiments', setCustomSentimentError);
+                      }}
+                    >
+                      <Input
+                        placeholder="Enter custom sentiment"
+                        value={customSentiment}
+                        onChange={(e) => { setCustomSentiment(e.target.value); setCustomSentimentError(''); }}
+                        className="flex-1"
+                      />
+                      <Button
+                        size="sm"
+                        type="submit"
+                        disabled={!customSentiment.trim()}
+                      >
+                        {constants.ADD}
+                      </Button>
+                    </form>
+                    {customSentimentError && <span className={styles.customInputError}>{customSentimentError}</span>}
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {(themeCategories.Sentiments
+                    .slice(0, expandedSentiments ? undefined : constants.SHORT_LIST_TAG_COUNT)
+                  ).map((sentiment) => (
+                    <button
+                      key={sentiment}
+                      onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
+                      className={
+                        selectedSentiments.includes(sentiment)
+                          ? `${styles.tagButton} ${styles.selected}`
+                          : styles.tagButton
+                      }
+                    >
+                      {sentiment}
+                    </button>
+                  ))}
+                  {themeCategories.Sentiments.length > constants.SHORT_LIST_TAG_COUNT && (
+                    <button
+                      onClick={() => setExpandedSentiments(!expandedSentiments)}
+                      className={styles.moreLessButton}
+                    >
+                      {expandedSentiments ? constants.LESS : constants.MORE}
+                    </button>
+                  )}
+                </div>
+              </div>
+              {/* People */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-medium">People</h3>
+                  <button
+                    onClick={() => setShowCustomPerson(!showCustomPerson)}
+                    className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+                  >
+                    <Plus className="h-3 w-3" />
+                    {constants.ADD_NEW}
+                  </button>
+                </div>
+                {showCustomPerson && (
+                  <div className="mb-3 flex flex-col gap-1">
+                    <form
+                      className={styles.customInputRow}
+                      onSubmit={e => {
+                        e.preventDefault();
+                        handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson, 'People', setCustomPersonError);
+                      }}
+                    >
+                      <Input
+                        placeholder="Enter custom person"
+                        value={customPerson}
+                        onChange={(e) => { setCustomPerson(e.target.value); setCustomPersonError(''); }}
+                        className="flex-1"
+                      />
+                      <Button
+                        size="sm"
+                        type="submit"
+                        disabled={!customPerson.trim()}
+                      >
+                        {constants.ADD}
+                      </Button>
+                    </form>
+                    {customPersonError && <span className={styles.customInputError}>{customPersonError}</span>}
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {(themeCategories.People
+                    .slice(0, expandedPeople ? undefined : constants.SHORT_LIST_TAG_COUNT)
+                  ).map((person) => (
+                    <button
+                      key={person}
+                      onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
+                      className={
+                        selectedPeople.includes(person)
+                          ? `${styles.tagButton} ${styles.selected}`
+                          : styles.tagButton
+                      }
+                    >
+                      {person}
+                    </button>
+                  ))}
+                  {themeCategories.People.length > constants.SHORT_LIST_TAG_COUNT && (
+                    <button
+                      onClick={() => setExpandedPeople(!expandedPeople)}
+                      className={styles.moreLessButton}
+                    >
+                      {expandedPeople ? constants.LESS : constants.MORE}
+                    </button>
+                  )}
+                </div>
+              </div>
+              {/* Actions */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-medium">Actions</h3>
+                  <button
+                    onClick={() => setShowCustomAction(!showCustomAction)}
+                    className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
+                  >
+                    <Plus className="h-3 w-3" />
+                    {constants.ADD_NEW}
+                  </button>
+                </div>
+                {showCustomAction && (
+                  <div className="mb-3 flex flex-col gap-1">
+                    <form
+                      className={styles.customInputRow}
+                      onSubmit={e => {
+                        e.preventDefault();
+                        handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction, 'Actions', setCustomActionError);
+                      }}
+                    >
+                      <Input
+                        placeholder="Enter custom action"
+                        value={customAction}
+                        onChange={(e) => { setCustomAction(e.target.value); setCustomActionError(''); }}
+                        className="flex-1"
+                      />
+                      <Button
+                        size="sm"
+                        type="submit"
+                        disabled={!customAction.trim()}
+                      >
+                        {constants.ADD}
+                      </Button>
+                    </form>
+                    {customActionError && <span className={styles.customInputError}>{customActionError}</span>}
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {(themeCategories.Actions
+                    .slice(0, expandedActions ? undefined : constants.SHORT_LIST_TAG_COUNT)
+                  ).map((action) => (
+                    <button
+                      key={action}
+                      onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
+                      className={
+                        selectedActions.includes(action)
+                          ? `${styles.tagButton} ${styles.selected}`
+                          : styles.tagButton
+                      }
+                    >
+                      {action}
+                    </button>
+                  ))}
+                  {themeCategories.Actions.length > constants.SHORT_LIST_TAG_COUNT && (
+                    <button
+                      onClick={() => setExpandedActions(!expandedActions)}
+                      className={styles.moreLessButton}
+                    >
+                      {expandedActions ? constants.LESS : constants.MORE}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Places */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-medium">Places</h3>
-              <button
-                onClick={() => setShowCustomPlace(!showCustomPlace)}
-                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
-              >
-                <Plus className="h-3 w-3" />
-                Add New
-              </button>
-            </div>
-            {showCustomPlace && (
-              <div className="mb-3 flex gap-2">
-                <Input
-                  placeholder="Enter custom place"
-                  value={customPlace}
-                  onChange={(e) => setCustomPlace(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace, customPlaces, setCustomPlaces);
-                    }
-                  }}
-                  className="flex-1"
-                />
-                <Button
-                  size="sm"
-                  onClick={() => handleAddCustomTag(customPlace, selectedPlaces, setSelectedPlaces, setCustomPlace, setShowCustomPlace, customPlaces, setCustomPlaces)}
-                  disabled={!customPlace.trim()}
-                >
-                  Add
-                </Button>
-              </div>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {[...themeCategories.Places, ...customPlaces].map((place) => (
-                <button
-                  key={place}
-                  onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
-                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
-                    selectedPlaces.includes(place)
-                      ? 'bg-muted border-border opacity-75'
-                      : 'bg-background border-border hover:bg-muted'
-                  }`}
-                >
-                  {place}
-                </button>
-              ))}
-              {themeCategories.Places.length > 4 && (
-                <button
-                  onClick={() => setExpandedPlaces(!expandedPlaces)}
-                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
-                >
-                  {expandedPlaces ? 'Less' : 'More'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Sentiments */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-medium">Sentiments</h3>
-              <button
-                onClick={() => setShowCustomSentiment(!showCustomSentiment)}
-                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
-              >
-                <Plus className="h-3 w-3" />
-                Add New
-              </button>
-            </div>
-            {showCustomSentiment && (
-              <div className="mb-3 flex gap-2">
-                <Input
-                  placeholder="Enter custom sentiment"
-                  value={customSentiment}
-                  onChange={(e) => setCustomSentiment(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment, customSentiments, setCustomSentiments);
-                    }
-                  }}
-                  className="flex-1"
-                />
-                <Button
-                  size="sm"
-                  onClick={() => handleAddCustomTag(customSentiment, selectedSentiments, setSelectedSentiments, setCustomSentiment, setShowCustomSentiment, customSentiments, setCustomSentiments)}
-                  disabled={!customSentiment.trim()}
-                >
-                  Add
-                </Button>
-              </div>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {[...themeCategories.Sentiments, ...customSentiments].map((sentiment) => (
-                <button
-                  key={sentiment}
-                  onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
-                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
-                    selectedSentiments.includes(sentiment)
-                      ? 'bg-muted border-border opacity-75'
-                      : 'bg-background border-border hover:bg-muted'
-                  }`}
-                >
-                  {sentiment}
-                </button>
-              ))}
-              {themeCategories.Sentiments.length > 4 && (
-                <button
-                  onClick={() => setExpandedSentiments(!expandedSentiments)}
-                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
-                >
-                  {expandedSentiments ? 'Less' : 'More'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* People */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-medium">People</h3>
-              <button
-                onClick={() => setShowCustomPerson(!showCustomPerson)}
-                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
-              >
-                <Plus className="h-3 w-3" />
-                Add New
-              </button>
-            </div>
-            {showCustomPerson && (
-              <div className="mb-3 flex gap-2">
-                <Input
-                  placeholder="Enter custom person"
-                  value={customPerson}
-                  onChange={(e) => setCustomPerson(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson, customPeople, setCustomPeople);
-                    }
-                  }}
-                  className="flex-1"
-                />
-                <Button
-                  size="sm"
-                  onClick={() => handleAddCustomTag(customPerson, selectedPeople, setSelectedPeople, setCustomPerson, setShowCustomPerson, customPeople, setCustomPeople)}
-                  disabled={!customPerson.trim()}
-                >
-                  Add
-                </Button>
-              </div>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {[...themeCategories.People, ...customPeople].map((person) => (
-                <button
-                  key={person}
-                  onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
-                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
-                    selectedPeople.includes(person)
-                      ? 'bg-muted border-border opacity-75'
-                      : 'bg-background border-border hover:bg-muted'
-                  }`}
-                >
-                  {person}
-                </button>
-              ))}
-              {themeCategories.People.length > 4 && (
-                <button
-                  onClick={() => setExpandedPeople(!expandedPeople)}
-                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
-                >
-                  {expandedPeople ? 'Less' : 'More'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-medium">Actions</h3>
-              <button
-                onClick={() => setShowCustomAction(!showCustomAction)}
-                className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
-              >
-                <Plus className="h-3 w-3" />
-                Add New
-              </button>
-            </div>
-            {showCustomAction && (
-              <div className="mb-3 flex gap-2">
-                <Input
-                  placeholder="Enter custom action"
-                  value={customAction}
-                  onChange={(e) => setCustomAction(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction, customActions, setCustomActions);
-                    }
-                  }}
-                  className="flex-1"
-                />
-                <Button
-                  size="sm"
-                  onClick={() => handleAddCustomTag(customAction, selectedActions, setSelectedActions, setCustomAction, setShowCustomAction, customActions, setCustomActions)}
-                  disabled={!customAction.trim()}
-                >
-                  Add
-                </Button>
-              </div>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {[...themeCategories.Actions, ...customActions].map((action) => (
-                <button
-                  key={action}
-                  onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
-                  className={`px-2 py-1 rounded-lg border text-sm transition-colors ${
-                    selectedActions.includes(action)
-                      ? 'bg-muted border-border opacity-75'
-                      : 'bg-background border-border hover:bg-muted'
-                  }`}
-                >
-                  {action}
-                </button>
-              ))}
-              {themeCategories.Actions.length > 4 && (
-                <button
-                  onClick={() => setExpandedActions(!expandedActions)}
-                  className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
-                >
-                  {expandedActions ? 'Less' : 'More'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Mood Selection - Fixed */}
-          <div className="fixed bottom-0 left-0 right-0 bg-background border-t pt-4 px-6 pb-4 max-w-3xl mx-auto">
+          {/* Mood Selection - now always at the bottom of the dialog */}
+          <div className="bg-background border-t pt-4 px-6 pb-4" style={{ width: '100%' }}>
             <div className="flex justify-center gap-4 mb-4">
-              {MOOD_OPTIONS.map((mood) => (
+              {constants.MOOD_OPTIONS.map((mood) => (
                 <button
                   key={mood.value}
                   onClick={() => setSelectedMood(mood.value)}
@@ -421,7 +449,6 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                 </button>
               ))}
             </div>
-
             <div className="space-y-3">
               <Button 
                 onClick={handleSave}
@@ -429,20 +456,18 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
                 size="lg"
               >
-                Log Dream
+                {constants.LOG_DREAM}
               </Button>
-              
               <Button 
                 onClick={handleNoDreams}
                 variant="outline" 
                 className="w-full"
                 size="lg"
               >
-                No Dreams To Log
+                {constants.NO_DREAMS_TO_LOG}
               </Button>
             </div>
           </div>
-        </div>
         </div>
       </DialogContent>
     </Dialog>
