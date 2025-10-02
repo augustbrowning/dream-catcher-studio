@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ReactWordcloud from "react-wordcloud";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ interface Dream {
 
 interface DreamAnalyticsProps {
   dreams: Dream[];
+  themeCategories: Record<string, string[]>;
 }
 
 const MOOD_EMOJIS = {
@@ -42,14 +44,6 @@ const MOOD_COLORS = {
   neutral: "bg-gray-300"
 };
 
-// Theme categories based on the tag system
-const THEME_CATEGORIES = {
-  sensations: ["flying", "falling", "running", "swimming", "climbing", "floating", "pain", "warmth", "cold"],
-  figures: ["family", "friends", "strangers", "animals", "celebrities", "deceased", "children", "authority"],
-  actions: ["chasing", "escaping", "fighting", "dancing", "singing", "eating", "driving", "working"],
-  places: ["home", "school", "work", "nature", "city", "beach", "mountains", "space", "underground"]
-};
-
 // Mock behavioral correlation data
 const BEHAVIORAL_CORRELATIONS = {
   joyful: [
@@ -69,8 +63,9 @@ const BEHAVIORAL_CORRELATIONS = {
   ]
 };
 
-const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
-  const [activeThemeCategory, setActiveThemeCategory] = useState<keyof typeof THEME_CATEGORIES>("sensations");
+const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
+  const categoryKeys = Object.keys(themeCategories);
+  const [activeThemeCategory, setActiveThemeCategory] = useState<string>(categoryKeys[0] || "");
   const [isDaylioConnected, setIsDaylioConnected] = useState(false);
   const [timePeriod, setTimePeriod] = useState<string>("all-time");
   const { toast } = useToast();
@@ -135,13 +130,13 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
   const sentimentEmojis = ["😊", "🙂", "😐", "😔", "😢"];
 
   // Calculate theme counts by category
-  const getThemesByCategory = (category: keyof typeof THEME_CATEGORIES) => {
-    const categoryThemes = THEME_CATEGORIES[category];
+  const getThemesByCategory = (category: string) => {
+    const categoryThemes = (themeCategories[category] || []).map(t => t.toLowerCase());
     const themeCounts = dreams.reduce((acc, dream) => {
       dream.themes.forEach(theme => {
         const normalizedTheme = theme.toLowerCase();
         if (categoryThemes.includes(normalizedTheme)) {
-          acc[theme] = (acc[theme] || 0) + 1;
+          acc[normalizedTheme] = (acc[normalizedTheme] || 0) + 1;
         }
       });
       return acc;
@@ -152,7 +147,10 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
       .slice(0, 12);
   };
 
+
+  // Prepare words for react-wordcloud
   const currentThemes = getThemesByCategory(activeThemeCategory);
+  const wordCloudWords = currentThemes.map(([text, value]) => ({ text, value }));
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6 sm:space-y-8 p-2 sm:p-6">
@@ -245,10 +243,10 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           {/* Tab Navigation */}
           <ScrollArea className="w-full">
             <div className="flex gap-1 mb-4 sm:mb-6 bg-muted/30 rounded-lg p-1 min-w-min sm:justify-center">
-              {Object.keys(THEME_CATEGORIES).map((category) => (
+              {categoryKeys.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setActiveThemeCategory(category as keyof typeof THEME_CATEGORIES)}
+                  onClick={() => setActiveThemeCategory(category)}
                   className={`px-2 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                     activeThemeCategory === category
                       ? "bg-primary text-primary-foreground"
@@ -263,49 +261,16 @@ const DreamAnalytics = ({ dreams }: DreamAnalyticsProps) => {
           </ScrollArea>
 
           {/* Word Cloud Visualization */}
-          <div className="min-h-[150px] sm:min-h-[200px] relative p-3 sm:p-6">
-            {currentThemes.length > 0 ? (
-              currentThemes.map(([theme, count], index) => {
-                const baseSize = window.innerWidth < 640 ? 12 : 14;
-                const maxSize = window.innerWidth < 640 ? 24 : 32;
-                const size = Math.max(baseSize, Math.min(maxSize, baseSize + (count * 2)));
-                const opacity = Math.max(0.5, Math.min(1, 0.5 + (count * 0.1)));
-                
-                // Generate random but deterministic position based on theme name
-                const seed = theme.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                const random = (offset: number) => ((seed * (offset + 1) * 9301 + 49297) % 233280) / 233280;
-                
-                // Grid-based positioning to reduce overlap (4x3 grid)
-                const gridSize = 4;
-                const gridX = (index % gridSize) / gridSize;
-                const gridY = Math.floor(index / gridSize) / Math.ceil(currentThemes.length / gridSize);
-                
-                // Add randomness within grid cell
-                const randomOffsetX = (random(1) - 0.5) * 20; // ±10%
-                const randomOffsetY = (random(2) - 0.5) * 20; // ±10%
-                const left = `${Math.max(5, Math.min(85, gridX * 100 + randomOffsetX))}%`;
-                const top = `${Math.max(5, Math.min(85, gridY * 100 + randomOffsetY))}%`;
-                
-                // Random rotation between -10 and 10 degrees
-                const rotation = (random(3) - 0.5) * 20;
-                
-                return (
-                  <span
-                    key={theme}
-                    className="cursor-pointer hover:text-primary transition-all absolute"
-                    style={{
-                      fontSize: `${size}px`,
-                      opacity,
-                      fontWeight: count > 3 ? 'bold' : 'normal',
-                      left,
-                      top,
-                      transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
-                    }}
-                  >
-                    {theme}
-                  </span>
-                );
-              })
+          <div aria-label={`Word cloud of recurring ${activeThemeCategory} themes`} className="min-h-[150px] sm:min-h-[200px] relative p-3 sm:p-6">
+            {wordCloudWords.length > 0 ? (
+              <ReactWordcloud 
+                words={wordCloudWords}
+                options={{
+                  fontSizes: [16, 60],
+                  rotations: 2,
+                  rotationAngles: [0, 90],
+                }}
+              />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <p className="text-muted-foreground text-center text-sm sm:text-base">

@@ -21,32 +21,14 @@ interface DreamEntryPopupProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (dreamData: Omit<Dream, 'id'>) => void;
+  themeCategories: Record<string, string[]>;
+  setThemeCategories: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
 }
 
 const SLEEP_QUALITY = [
   { id: 'poor', label: 'Poor', color: 'bg-red-100 border-red-300 text-red-800' },
   { id: 'fair', label: 'Fair', color: 'bg-yellow-100 border-yellow-300 text-yellow-800' },
   { id: 'good', label: 'Good', color: 'bg-green-100 border-green-300 text-green-800' }
-];
-
-const SENTIMENTS = [
-  'Nervous', 'Intrigued', 'Inquisitive', 'Eager', 'Pondering',
-  'Uneasy', 'Engaged', 'Wondering', 'Fascinated', 'Questioning'
-];
-
-const PEOPLE = [
-  'Coach', 'Stranger', 'Coworker', 'Neighbor', 'Teacher', 'Classmate',
-  'Future Self', 'Childhood Self', 'A Crowd'
-];
-
-const ACTIONS = [
-  'Dreaming', 'Reflecting', 'Driving', 'Sketching', 'Creating',
-  'Flying', 'Running', 'Swimming', 'Dancing', 'Exploring'
-];
-
-const PLACES = [
-  'Ocean', 'House', 'Living Room', 'Horizon', 'Car', 'Jungle',
-  'Gym', 'Seattle', 'Arizona', 'River', 'Desert', 'Park'
 ];
 
 const MOOD_OPTIONS = [
@@ -57,7 +39,8 @@ const MOOD_OPTIONS = [
   { emoji: '😊', value: 'joyful' }
 ];
 
-const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
+const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCategories }: DreamEntryPopupProps) => {
+  // Editable tag state
   const [sleepQuality, setSleepQuality] = useState<string>('');
   const [selectedSentiments, setSelectedSentiments] = useState<string[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
@@ -130,6 +113,11 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
     if (customValue.trim() && !selectedTags.includes(customValue.trim()) && !customTagsList.includes(customValue.trim()) && selectedTags.length < 10) {
       setCustomTagsList([...customTagsList, customValue.trim()]);
       setSelectedTags([...selectedTags, customValue.trim()]);
+      // Also add to main tag list for the relevant category
+      if (setCustomTagsList === setCustomSentiments) setThemeCategories(prev => ({ ...prev, Sentiments: [...prev.Sentiments, customValue.trim()] }));
+      if (setCustomTagsList === setCustomPeople) setThemeCategories(prev => ({ ...prev, People: [...prev.People, customValue.trim()] }));
+      if (setCustomTagsList === setCustomActions) setThemeCategories(prev => ({ ...prev, Actions: [...prev.Actions, customValue.trim()] }));
+      if (setCustomTagsList === setCustomPlaces) setThemeCategories(prev => ({ ...prev, Places: [...prev.Places, customValue.trim()] }));
       setCustomValue('');
       setShowCustom(false);
     }
@@ -215,7 +203,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {[...PLACES, ...customPlaces].map((place) => (
+              {[...themeCategories.Places, ...customPlaces].map((place) => (
                 <button
                   key={place}
                   onClick={() => handleTagToggle(place, selectedPlaces, setSelectedPlaces)}
@@ -228,7 +216,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {place}
                 </button>
               ))}
-              {PLACES.length > 4 && (
+              {themeCategories.Places.length > 4 && (
                 <button
                   onClick={() => setExpandedPlaces(!expandedPlaces)}
                   className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
@@ -274,7 +262,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {[...SENTIMENTS, ...customSentiments].map((sentiment) => (
+              {[...themeCategories.Sentiments, ...customSentiments].map((sentiment) => (
                 <button
                   key={sentiment}
                   onClick={() => handleTagToggle(sentiment, selectedSentiments, setSelectedSentiments)}
@@ -287,7 +275,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {sentiment}
                 </button>
               ))}
-              {SENTIMENTS.length > 4 && (
+              {themeCategories.Sentiments.length > 4 && (
                 <button
                   onClick={() => setExpandedSentiments(!expandedSentiments)}
                   className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
@@ -333,7 +321,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {[...PEOPLE, ...customPeople].map((person) => (
+              {[...themeCategories.People, ...customPeople].map((person) => (
                 <button
                   key={person}
                   onClick={() => handleTagToggle(person, selectedPeople, setSelectedPeople)}
@@ -346,7 +334,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {person}
                 </button>
               ))}
-              {PEOPLE.length > 4 && (
+              {themeCategories.People.length > 4 && (
                 <button
                   onClick={() => setExpandedPeople(!expandedPeople)}
                   className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
@@ -392,7 +380,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
               </div>
             )}
             <div className="flex flex-wrap gap-2">
-              {[...ACTIONS, ...customActions].map((action) => (
+              {[...themeCategories.Actions, ...customActions].map((action) => (
                 <button
                   key={action}
                   onClick={() => handleTagToggle(action, selectedActions, setSelectedActions)}
@@ -405,7 +393,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave }: DreamEntryPopupProps) => {
                   {action}
                 </button>
               ))}
-              {ACTIONS.length > 4 && (
+              {themeCategories.Actions.length > 4 && (
                 <button
                   onClick={() => setExpandedActions(!expandedActions)}
                   className="px-2 py-1 rounded-lg border border-border hover:bg-muted text-muted-foreground text-sm transition-colors"
