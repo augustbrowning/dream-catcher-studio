@@ -183,7 +183,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                     className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
                   >
                     <Plus className="h-3 w-3" />
-                    {constants.ADD_NEW_STRING}
+                    {constants.ADD_NEW}
                   </button>
                 </div>
                 {showCustomPlace && (
@@ -206,7 +206,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                         type="submit"
                         disabled={!customPlace.trim()}
                       >
-                        Add
+                        {constants.ADD}
                       </Button>
                     </form>
                     {customPlaceError && <span className={styles.customInputError}>{customPlaceError}</span>}
@@ -233,7 +233,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                       onClick={() => setExpandedPlaces(!expandedPlaces)}
                       className={styles.moreLessButton}
                     >
-                      {expandedPlaces ? 'Less' : 'More'}
+                      {expandedPlaces ? constants.LESS : constants.MORE}
                     </button>
                   )}
                 </div>
@@ -247,7 +247,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                     className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
                   >
                     <Plus className="h-3 w-3" />
-                    {constants.ADD_NEW_STRING}
+                    {constants.ADD_NEW}
                   </button>
                 </div>
                 {showCustomSentiment && (
@@ -270,7 +270,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                         type="submit"
                         disabled={!customSentiment.trim()}
                       >
-                        Add
+                        {constants.ADD}
                       </Button>
                     </form>
                     {customSentimentError && <span className={styles.customInputError}>{customSentimentError}</span>}
@@ -297,7 +297,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                       onClick={() => setExpandedSentiments(!expandedSentiments)}
                       className={styles.moreLessButton}
                     >
-                      {expandedSentiments ? 'Less' : 'More'}
+                      {expandedSentiments ? constants.LESS : constants.MORE}
                     </button>
                   )}
                 </div>
@@ -311,7 +311,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                     className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
                   >
                     <Plus className="h-3 w-3" />
-                    {constants.ADD_NEW_STRING}
+                    {constants.ADD_NEW}
                   </button>
                 </div>
                 {showCustomPerson && (
@@ -334,7 +334,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                         type="submit"
                         disabled={!customPerson.trim()}
                       >
-                        Add
+                        {constants.ADD}
                       </Button>
                     </form>
                     {customPersonError && <span className={styles.customInputError}>{customPersonError}</span>}
@@ -361,7 +361,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                       onClick={() => setExpandedPeople(!expandedPeople)}
                       className={styles.moreLessButton}
                     >
-                      {expandedPeople ? 'Less' : 'More'}
+                      {expandedPeople ? constants.LESS : constants.MORE}
                     </button>
                   )}
                 </div>
@@ -375,7 +375,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                     className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1"
                   >
                     <Plus className="h-3 w-3" />
-                    {constants.ADD_NEW_STRING}
+                    {constants.ADD_NEW}
                   </button>
                 </div>
                 {showCustomAction && (
@@ -398,7 +398,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                         type="submit"
                         disabled={!customAction.trim()}
                       >
-                        Add
+                        {constants.ADD}
                       </Button>
                     </form>
                     {customActionError && <span className={styles.customInputError}>{customActionError}</span>}
@@ -425,7 +425,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                       onClick={() => setExpandedActions(!expandedActions)}
                       className={styles.moreLessButton}
                     >
-                      {expandedActions ? 'Less' : 'More'}
+                      {expandedActions ? constants.LESS : constants.MORE}
                     </button>
                   )}
                 </div>
@@ -456,7 +456,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
                 size="lg"
               >
-                Log Dream
+                {constants.LOG_DREAM}
               </Button>
               <Button 
                 onClick={handleNoDreams}
@@ -464,7 +464,7 @@ const DreamEntryPopup = ({ isOpen, onClose, onSave, themeCategories, setThemeCat
                 className="w-full"
                 size="lg"
               >
-                No Dreams To Log
+                {constants.NO_DREAMS_TO_LOG}
               </Button>
             </div>
           </div>

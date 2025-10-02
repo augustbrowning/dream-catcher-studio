@@ -16,7 +16,12 @@ export const MOOD_OPTIONS = [
 ];
 
 export const SHORT_LIST_TAG_COUNT = 10;
-export const ADD_NEW_STRING = 'Add New';
+export const ADD = 'Add';
+export const ADD_NEW = 'Add New';
 export const ERROR_TAG_EXISTS = 'That tag already exists.';
+export const LESS = 'Less';
+export const LOG_DREAM = 'Log Dream';
+export const MORE = 'More';
+export const NO_DREAMS_TO_LOG = 'No dreams to log';
 export const SELECTED_TAGS_LABEL = (count: number) => `Selected (${count}/10) - Minimum 3 required`;
 export const TAG_PLACEHOLDER = (n: number) => `Tag ${n}`;
