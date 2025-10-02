@@ -9,6 +9,7 @@ import { X, Upload, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { format, subDays } from "date-fns";
+import * as constants from "./dreamAnalyticsConstants";
 
 interface Dream {
   id: string;
@@ -24,44 +25,6 @@ interface DreamAnalyticsProps {
   dreams: Dream[];
   themeCategories: Record<string, string[]>;
 }
-
-const MOOD_EMOJIS = {
-  joyful: "😊",
-  content: "🙂",
-  neutral: "😐",
-  disappointed: "😔",
-  sad: "😢"
-};
-
-const MOOD_COLORS = {
-  joyful: "bg-yellow-400",
-  peaceful: "bg-blue-400", 
-  exciting: "bg-orange-400",
-  mysterious: "bg-purple-400",
-  scary: "bg-red-400",
-  sad: "bg-blue-600",
-  confused: "bg-gray-400",
-  neutral: "bg-gray-300"
-};
-
-// Mock behavioral correlation data
-const BEHAVIORAL_CORRELATIONS = {
-  joyful: [
-    { activity: "Meditation", percentage: 85 },
-    { activity: "Sleep", percentage: 78 },
-    { activity: "Cardio", percentage: 72 }
-  ],
-  neutral: [
-    { activity: "Screen Time", percentage: 65 },
-    { activity: "Resistance Training", percentage: 58 },
-    { activity: "Sugar", percentage: 45 }
-  ],
-  scary: [
-    { activity: "Alcohol", percentage: 73 },
-    { activity: "Screen Time", percentage: 68 },
-    { activity: "Sugar", percentage: 61 }
-  ]
-};
 
 const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
   const categoryKeys = Object.keys(themeCategories);
@@ -102,9 +65,9 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
       <Card className="w-full max-w-4xl mx-auto bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
         <CardContent className="p-12 text-center">
           <div className="h-16 w-16 mx-auto mb-4 text-primary/50 text-4xl">📊</div>
-          <h3 className="text-xl font-semibold mb-2 text-moonlight">No Analytics Yet</h3>
+          <h3 className="text-xl font-semibold mb-2 text-moonlight">{constants.NO_ANALYTICS_YET}</h3>
           <p className="text-muted-foreground">
-            Capture at least a few dreams to see insights and patterns in your dream journal.
+            {constants.CAPTURE_A_FEW_DREAMS}
           </p>
         </CardContent>
       </Card>
@@ -158,7 +121,7 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
       {/* Dream Vibes Calendar */}
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
         <CardContent className="p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">Dream Vibes</h3>
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-foreground">{constants.DREAM_VIBES}</h3>
           <div className="flex gap-4">
             {/* Sentiment emojis column */}
             <div className="flex flex-col">
@@ -180,7 +143,7 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
                     {calendarDays.map((day, dayIndex) => {
                       // Check if this day has a dream with this sentiment
                       const hasThisSentiment = day.hasDream && day.mood && 
-                        MOOD_EMOJIS[day.mood as keyof typeof MOOD_EMOJIS] === emoji;
+                        constants.MOOD_EMOJIS[day.mood as keyof typeof constants.MOOD_EMOJIS] === emoji;
                       
                       // Get color based on mood
                       const getMoodColor = (mood: string) => {
@@ -227,15 +190,15 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
       <Card className="bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical">
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h3 className="text-lg sm:text-xl font-semibold text-foreground">Recurring Themes</h3>
+            <h3 className="text-lg sm:text-xl font-semibold text-foreground">{constants.RECURRING_THEMES}</h3>
             <Select value={timePeriod} onValueChange={setTimePeriod}>
               <SelectTrigger className="w-[130px] sm:w-[140px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="last-week">Last Week</SelectItem>
-                <SelectItem value="last-month">Last Month</SelectItem>
-                <SelectItem value="all-time">All Time</SelectItem>
+                <SelectItem value="last-week">{constants.LAST_WEEK}</SelectItem>
+                <SelectItem value="last-month">{constants.LAST_MONTH}</SelectItem>
+                <SelectItem value="all-time">{constants.ALL_TIME}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -325,7 +288,7 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
                   😊 <span className="hidden sm:inline">Joyful Dreams</span><span className="sm:hidden">Joyful</span>
                 </h4>
                 <div className="space-y-2 sm:space-y-3">
-                  {BEHAVIORAL_CORRELATIONS.joyful.map((item) => (
+                  {constants.BEHAVIORAL_CORRELATIONS.joyful.map((item) => (
                     <div key={item.activity} className="flex items-center justify-between p-2 sm:p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
                       <span className="text-xs sm:text-sm">{item.activity}</span>
                       <div className="flex items-center gap-1 sm:gap-2">
@@ -345,7 +308,7 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
                   😐 Neutral/Mixed Dreams
                 </h4>
                 <div className="space-y-3">
-                  {BEHAVIORAL_CORRELATIONS.neutral.map((item) => (
+                  {constants.BEHAVIORAL_CORRELATIONS.neutral.map((item) => (
                     <div key={item.activity} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-950/20 rounded-lg">
                       <span className="text-sm">{item.activity}</span>
                       <div className="flex items-center gap-2">
@@ -365,7 +328,7 @@ const DreamAnalytics = ({ dreams, themeCategories }: DreamAnalyticsProps) => {
                   😨 Terrifying Dreams
                 </h4>
                 <div className="space-y-3">
-                  {BEHAVIORAL_CORRELATIONS.scary.map((item) => (
+                  {constants.BEHAVIORAL_CORRELATIONS.scary.map((item) => (
                     <div key={item.activity} className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950/20 rounded-lg">
                       <span className="text-sm">{item.activity}</span>
                       <div className="flex items-center gap-2">

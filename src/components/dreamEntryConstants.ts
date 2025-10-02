@@ -1,5 +1,5 @@
-// dreamEntryStrings.ts
-// Centralized strings for DreamEntryPopup UI
+// dreamEntryConstants.ts
+// Centralized constants for DreamEntryPopup UI
 
 export const SLEEP_QUALITY = [
   { id: 'poor', label: 'Poor', color: 'bg-red-100 border-red-300 text-red-800' },
