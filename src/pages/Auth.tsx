@@ -19,144 +19,37 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        navigate("/");
-      }
-    };
-    checkUser();
-  }, [navigate]);
+  // Session check removed for prototype - all auth bypassed
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      if (isSignUp) {
-        const isNative = Capacitor.isNativePlatform();
-        const redirectUrl = isNative ? 'app.lovable.2aa1f291973b419da1adc7f1b242259c://auth' : `${window.location.origin}/`;
-        
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: redirectUrl,
-            data: {
-              display_name: displayName
-            }
-          }
-        });
-
-        if (error) {
-          if (error.message.includes("already registered")) {
-            toast({
-              title: "Account already exists",
-              description: "This email is already registered. Try signing in instead.",
-              variant: "destructive",
-            });
-          } else {
-            toast({
-              title: "Sign up failed",
-              description: error.message,
-              variant: "destructive",
-            });
-          }
-        } else {
-          toast({
-            title: "Check your email",
-            description: "Please check your email for a confirmation link.",
-          });
-        }
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) {
-          toast({
-            title: "Sign in failed",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          navigate("/");
-        }
-      }
-    } catch (error) {
-      toast({
-        title: "An error occurred",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
+    // Bypass authentication for prototype
+    setTimeout(() => {
       setLoading(false);
-    }
+      navigate("/");
+    }, 500);
   };
 
   const handleGoogleAuth = async () => {
     setLoading(true);
-    try {
-      const isNative = Capacitor.isNativePlatform();
-      const redirectTo = isNative ? 'app.lovable.2aa1f291973b419da1adc7f1b242259c://auth' : `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo
-        }
-      });
-
-      if (error) {
-        toast({
-          title: "Google sign in failed",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "An error occurred",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
+    
+    // Bypass authentication for prototype
+    setTimeout(() => {
       setLoading(false);
-    }
+      navigate("/");
+    }, 500);
   };
 
   const handleAppleAuth = async () => {
     setLoading(true);
-    try {
-      const isNative = Capacitor.isNativePlatform();
-      const redirectTo = isNative ? 'app.lovable.2aa1f291973b419da1adc7f1b242259c://auth' : `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'apple',
-        options: {
-          redirectTo
-        }
-      });
-
-      if (error) {
-        toast({
-          title: "Apple sign in failed",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "An error occurred",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
+    
+    // Bypass authentication for prototype
+    setTimeout(() => {
       setLoading(false);
-    }
+      navigate("/");
+    }, 500);
   };
 
   return (
