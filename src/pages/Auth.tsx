@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Capacitor } from '@capacitor/core';
+import { Moon } from "lucide-react";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -178,14 +179,7 @@ const Auth = () => {
       <Card className="w-full max-w-md relative z-10 bg-card/80 backdrop-blur-md border-primary/20">
         <CardHeader className="text-center space-y-4 sm:space-y-6 px-4 sm:px-6 pt-6 sm:pt-8">
           <div className="flex flex-col items-center space-y-3 sm:space-y-4">
-            <div className="relative">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary rounded-lg flex items-center justify-center">
-                <div className="w-8 h-6 sm:w-10 sm:h-8 bg-card rounded-sm relative">
-                  <div className="absolute -top-2 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-primary rounded-full" />
-                  <div className="absolute -top-1 right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full" />
-                </div>
-              </div>
-            </div>
+            <Moon className="h-12 w-12 sm:h-16 sm:w-16 text-primary animate-dream-float" />
             <div>
               <CardTitle className="text-xl sm:text-2xl font-bold">DREAM</CardTitle>
               <CardDescription className="text-xs sm:text-sm font-medium">JOURNAL</CardDescription>
