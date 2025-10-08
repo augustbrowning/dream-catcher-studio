@@ -159,7 +159,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-night flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-night flex items-center justify-center p-3 sm:p-4">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_70%)]" />
         {Array.from({ length: 50 }).map((_, i) => (
@@ -176,30 +176,30 @@ const Auth = () => {
       </div>
 
       <Card className="w-full max-w-md relative z-10 bg-card/80 backdrop-blur-md border-primary/20">
-        <CardHeader className="text-center space-y-6">
-          <div className="flex flex-col items-center space-y-4">
+        <CardHeader className="text-center space-y-4 sm:space-y-6 px-4 sm:px-6 pt-6 sm:pt-8">
+          <div className="flex flex-col items-center space-y-3 sm:space-y-4">
             <div className="relative">
-              <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center">
-                <div className="w-10 h-8 bg-card rounded-sm relative">
-                  <div className="absolute -top-2 -right-1 w-3 h-3 bg-primary rounded-full" />
-                  <div className="absolute -top-1 right-1 w-2 h-2 bg-primary rounded-full" />
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary rounded-lg flex items-center justify-center">
+                <div className="w-8 h-6 sm:w-10 sm:h-8 bg-card rounded-sm relative">
+                  <div className="absolute -top-2 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-primary rounded-full" />
+                  <div className="absolute -top-1 right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full" />
                 </div>
               </div>
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold">DREAM</CardTitle>
-              <CardDescription className="text-sm font-medium">JOURNAL</CardDescription>
+              <CardTitle className="text-xl sm:text-2xl font-bold">DREAM</CardTitle>
+              <CardDescription className="text-xs sm:text-sm font-medium">JOURNAL</CardDescription>
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6">
-          <div className="space-y-3">
+        <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6 pb-6 sm:pb-8">
+          <div className="space-y-2.5 sm:space-y-3">
             <Button
               onClick={handleAppleAuth}
               disabled={loading}
               variant="default"
-              className="w-full"
+              className="w-full text-sm sm:text-base h-10 sm:h-11"
             >
               Continue with Apple
             </Button>
@@ -208,23 +208,23 @@ const Auth = () => {
               onClick={handleGoogleAuth}
               disabled={loading}
               variant="outline"
-              className="w-full"
+              className="w-full text-sm sm:text-base h-10 sm:h-11"
             >
               Continue with Google
             </Button>
           </div>
 
-          <div className="relative">
+          <div className="relative py-2">
             <Separator />
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="bg-card px-2 text-xs text-muted-foreground">OR</span>
             </div>
           </div>
 
-          <form onSubmit={handleEmailAuth} className="space-y-4">
+          <form onSubmit={handleEmailAuth} className="space-y-3 sm:space-y-4">
             {isSignUp && (
-              <div className="space-y-2">
-                <Label htmlFor="displayName">Display Name</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="displayName" className="text-sm">Display Name</Label>
                 <Input
                   id="displayName"
                   type="text"
@@ -232,12 +232,13 @@ const Auth = () => {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   required={isSignUp}
+                  className="h-10 sm:h-11 text-sm sm:text-base"
                 />
               </div>
             )}
             
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="email" className="text-sm">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -245,11 +246,12 @@ const Auth = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="h-10 sm:h-11 text-sm sm:text-base"
               />
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="password" className="text-sm">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -257,6 +259,7 @@ const Auth = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="h-10 sm:h-11 text-sm sm:text-base"
               />
             </div>
             
@@ -264,17 +267,17 @@ const Auth = () => {
               type="submit"
               disabled={loading}
               variant="dream"
-              className="w-full"
+              className="w-full text-sm sm:text-base h-10 sm:h-11 mt-2"
             >
               {loading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
             </Button>
           </form>
 
-          <div className="text-center">
+          <div className="text-center pt-1">
             <Button
               variant="link"
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm"
+              className="text-xs sm:text-sm h-auto p-0"
             >
               {isSignUp
                 ? "Already have an account? Sign in"
