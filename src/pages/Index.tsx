@@ -80,32 +80,32 @@ const [themeCategories, setThemeCategories] = useState<Record<string, string[]>>
     }
   }, []);
 
-  // Redirect to auth if not logged in
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/auth");
-    }
-  }, [user, loading, navigate]);
+  // Auth check bypassed for prototype
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     navigate("/auth");
+  //   }
+  // }, [user, loading, navigate]);
 
-  // Show loading screen while checking authentication
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-night flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto animate-pulse">
-            <div className="w-10 h-8 bg-card rounded-sm relative">
-              <div className="absolute -top-2 -right-1 w-3 h-3 bg-primary rounded-full" />
-              <div className="absolute -top-1 right-1 w-2 h-2 bg-primary rounded-full" />
-            </div>
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">DREAM JOURNAL</h1>
-            <p className="text-muted-foreground">Loading...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Loading screen removed for prototype
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-gradient-night flex items-center justify-center">
+  //       <div className="text-center space-y-4">
+  //         <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto animate-pulse">
+  //           <div className="w-10 h-8 bg-card rounded-sm relative">
+  //             <div className="absolute -top-2 -right-1 w-3 h-3 bg-primary rounded-full" />
+  //             <div className="absolute -top-1 right-1 w-2 h-2 bg-primary rounded-full" />
+  //           </div>
+  //         </div>
+  //         <div>
+  //           <h1 className="text-2xl font-bold">DREAM JOURNAL</h1>
+  //           <p className="text-muted-foreground">Loading...</p>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const handleSaveDream = (dreamData: Omit<Dream, 'id'>) => {
     const newDream: Dream = {
