@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Moon, BookOpen, TrendingUp, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 interface NavigationProps {
   activeTab: string;
@@ -10,6 +11,12 @@ interface NavigationProps {
 
 const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => {
   const { signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-card/40 backdrop-blur-lg border-b border-primary/20 shadow-mystical">
@@ -50,7 +57,7 @@ const Navigation = ({ activeTab, onTabChange, dreamCount }: NavigationProps) => 
           <div className="flex items-center gap-1 sm:gap-2">
             <Button
               variant="ghost"
-              onClick={signOut}
+              onClick={handleSignOut}
               className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4"
               size="sm"
             >
