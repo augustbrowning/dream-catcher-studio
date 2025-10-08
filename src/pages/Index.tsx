@@ -80,11 +80,11 @@ const [themeCategories, setThemeCategories] = useState<Record<string, string[]>>
     }
   }, []);
 
-  // Redirect to auth if not logged in (temporarily disabled for testing)
+  // Redirect to auth if not logged in
   useEffect(() => {
-    // if (!loading && !user) {
-    //   navigate("/auth");
-    // }
+    if (!loading && !user) {
+      navigate("/auth");
+    }
   }, [user, loading, navigate]);
 
   // Show loading screen while checking authentication
