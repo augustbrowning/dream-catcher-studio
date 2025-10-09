@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useDreams, Dream } from "@/hooks/useDreams";
 import Navigation from "@/components/Navigation";
 import TagBasedDreamEntry from "@/components/TagBasedDreamEntry";
 import DreamList from "@/components/DreamList";
@@ -10,22 +11,12 @@ import { Button } from "@/components/ui/button";
 import starryBackground from "@/assets/starry-background.jpg";
 import { format, isToday } from "date-fns";
 
-interface Dream {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  mood: string;
-  themes: string[];
-  lucidity: string;
-}
-
 const Index = () => {
-  const { user, loading, signOut } = useAuth();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("list"); // Default to journal view
-  const [dreams, setDreams] = useState<Dream[]>([]);
+  const [activeTab, setActiveTab] = useState("list");
   const [showDreamPopup, setShowDreamPopup] = useState(false);
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const { dreams, isLoading: dreamsLoading, createDream } = useDreams(user?.id);
 
   // Editable tag lists
 const initialSentiments = [
@@ -52,22 +43,30 @@ const [themeCategories, setThemeCategories] = useState<Record<string, string[]>>
   Places: initialPlaces,
 });
 
-  // Load dreams from localStorage on component mount
+  // Migrate localStorage dreams to database on first login
   useEffect(() => {
-    const savedDreams = localStorage.getItem("dreamcatcher-dreams");
-    if (savedDreams) {
-      try {
-        setDreams(JSON.parse(savedDreams));
-      } catch (error) {
-        console.error("Error loading dreams from localStorage:", error);
+    if (user && !dreamsLoading && dreams.length === 0) {
+      const storedDreams = localStorage.getItem('dreamcatcher-dreams');
+      if (storedDreams) {
+        try {
+          const localDreams = JSON.parse(storedDreams);
+          localDreams.forEach((dream: Dream) => {
+            createDream({
+              title: dream.title,
+              description: dream.description,
+              date: dream.date,
+              mood: dream.mood,
+              themes: dream.themes,
+              lucidity: dream.lucidity,
+            });
+          });
+          localStorage.removeItem('dreamcatcher-dreams');
+        } catch (error) {
+          console.error("Error migrating dreams:", error);
+        }
       }
     }
-  }, []);
-
-  // Save dreams to localStorage whenever dreams array changes
-  useEffect(() => {
-    localStorage.setItem("dreamcatcher-dreams", JSON.stringify(dreams));
-  }, [dreams]);
+  }, [user, dreamsLoading, dreams.length]);
 
   // Check if popup should be shown on first visit each day
   useEffect(() => {
@@ -80,40 +79,37 @@ const [themeCategories, setThemeCategories] = useState<Record<string, string[]>>
     }
   }, []);
 
-  // Auth check bypassed for prototype
-  // useEffect(() => {
-  //   if (!loading && !user) {
-  //     navigate("/auth");
-  //   }
-  // }, [user, loading, navigate]);
+  // Redirect to auth if not logged in
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth");
+    }
+  }, [user, loading, navigate]);
 
-  // Loading screen removed for prototype
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen bg-gradient-night flex items-center justify-center">
-  //       <div className="text-center space-y-4">
-  //         <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto animate-pulse">
-  //           <div className="w-10 h-8 bg-card rounded-sm relative">
-  //             <div className="absolute -top-2 -right-1 w-3 h-3 bg-primary rounded-full" />
-  //             <div className="absolute -top-1 right-1 w-2 h-2 bg-primary rounded-full" />
-  //           </div>
-  //         </div>
-  //         <div>
-  //           <h1 className="text-2xl font-bold">DREAM JOURNAL</h1>
-  //           <p className="text-muted-foreground">Loading...</p>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  // Show loading screen while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-night flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto animate-pulse">
+            <div className="w-10 h-8 bg-card rounded-sm relative">
+              <div className="absolute -top-2 -right-1 w-3 h-3 bg-primary rounded-full" />
+              <div className="absolute -top-1 right-1 w-2 h-2 bg-primary rounded-full" />
+            </div>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">DREAM JOURNAL</h1>
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleSaveDream = (dreamData: Omit<Dream, 'id'>) => {
-    const newDream: Dream = {
-      ...dreamData,
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9)
-    };
-    setDreams(prev => [newDream, ...prev]);
-    setActiveTab("list"); // Switch to journal view after saving
+    createDream(dreamData);
+    setShowDreamPopup(false);
+    setActiveTab("list");
   };
 
   const renderContent = () => {

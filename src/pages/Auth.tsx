@@ -19,37 +19,102 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Session check removed for prototype - all auth bypassed
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/");
+      }
+    });
+  }, [navigate]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Bypass authentication for prototype
-    setTimeout(() => {
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: redirectUrl,
+            data: {
+              display_name: displayName,
+            },
+          },
+        });
+
+        if (error) throw error;
+        
+        toast({
+          title: "Success!",
+          description: "Check your email to confirm your account.",
+        });
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+        
+        navigate("/");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An error occurred during authentication",
+        variant: "destructive",
+      });
+    } finally {
       setLoading(false);
-      navigate("/");
-    }, 500);
+    }
   };
 
   const handleGoogleAuth = async () => {
     setLoading(true);
     
-    // Bypass authentication for prototype
-    setTimeout(() => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An error occurred with Google sign in",
+        variant: "destructive",
+      });
       setLoading(false);
-      navigate("/");
-    }, 500);
+    }
   };
 
   const handleAppleAuth = async () => {
     setLoading(true);
     
-    // Bypass authentication for prototype
-    setTimeout(() => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An error occurred with Apple sign in",
+        variant: "destructive",
+      });
       setLoading(false);
-      navigate("/");
-    }, 500);
+    }
   };
 
   return (
