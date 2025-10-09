@@ -182,15 +182,27 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
   // Main journal view
   if (dreams.length === 0) {
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical mx-2 sm:mx-auto">
-        <CardContent className="p-6 sm:p-12 text-center">
-          <Moon className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-primary/50" />
-          <h3 className="text-lg sm:text-xl font-semibold mb-2 text-moonlight">No Dreams Yet</h3>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Start capturing your dreams to build your personal dream journal and discover patterns in your subconscious mind.
-          </p>
-        </CardContent>
-      </Card>
+      <div className="relative">
+        <Card className="w-full max-w-4xl mx-auto bg-card/80 backdrop-blur-lg border-primary/20 shadow-mystical mx-2 sm:mx-auto">
+          <CardContent className="p-6 sm:p-12 text-center">
+            <Moon className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-primary/50" />
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 text-moonlight">No Dreams Yet</h3>
+            <p className="text-muted-foreground text-sm sm:text-base">
+              Start capturing your dreams to build your personal dream journal and discover patterns in your subconscious mind.
+            </p>
+          </CardContent>
+        </Card>
+        
+        {/* Fixed Add Entry Button */}
+        {onAddEntry && (
+          <Button 
+            onClick={onAddEntry}
+            className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-2xl shadow-primary/50 h-14 w-14 sm:h-16 sm:w-16 p-0 flex items-center justify-center"
+          >
+            <Plus className="h-6 w-6 sm:h-7 sm:w-7" />
+          </Button>
+        )}
+      </div>
     );
   }
 
@@ -289,17 +301,12 @@ const DreamList = ({ dreams, onAddEntry }: DreamListProps) => {
 
       {/* Fixed Add Entry Button */}
       {onAddEntry && (
-        <div className="fixed bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-          <Button 
-            onClick={onAddEntry}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg flex items-center gap-2 text-sm sm:text-base"
-            size={window.innerWidth < 640 ? "default" : "lg"}
-          >
-            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="hidden sm:inline">New Entry</span>
-            <span className="sm:hidden">New</span>
-          </Button>
-        </div>
+        <Button 
+          onClick={onAddEntry}
+          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-2xl shadow-primary/50 h-14 w-14 sm:h-16 sm:w-16 p-0 flex items-center justify-center"
+        >
+          <Plus className="h-6 w-6 sm:h-7 sm:w-7" />
+        </Button>
       )}
     </div>
   );
